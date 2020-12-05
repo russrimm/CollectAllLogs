@@ -23,7 +23,6 @@ $SendStatusMessage = 'Yes'
 $DumpSystemEventLog = 'Yes'
 $DumpSystemAppLog = 'Yes'
 $GatherSpecifiedLog = "GatherNothing"
-$GatherNomadLogs = 'No'
 $GatherSepExclusions = 'No'
 $GatherMDMDiagnostics = 'Yes'
 $GatherDateCreatedRegistryPol = 'No'
@@ -139,7 +138,7 @@ Function New-ZipFile {
                 # Push-Location so we can use Resolve-Path -Relative
                 Push-Location (Split-Path $item)
                 # This will get the file, or all the files in the folder (recursively)
-                ForEach ($file in Get-ChildItem $item -Recurse -File -Force | % FullName) {
+                ForEach ($file in Get-ChildItem $item -Recurse -File -Force | ForEach-Object FullName) {
                     # Calculate the relative file path
                     $relative = (Resolve-Path $file -Relative).TrimStart(".\")
                     # Add the file to the zip
