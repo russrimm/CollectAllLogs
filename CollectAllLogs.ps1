@@ -36,11 +36,11 @@ $HttpMode = $null
 $ClientCommunicationMode = $null
 $NumericDate = Get-Date -uFormat "%m%d%Y%H%MS"            
 $UplodadFileName = "$env:Computername-$numericdate.zip"
-$CCMLogdirectory = Get-ItemProperty -path HKLM:\software\microsoft\ccm\Logging\@global -Name LogDirectory | Select-Object logdirectory -ExpandProperty Logdirectory 
-$CCMTempDir = Get-ItemProperty -path HKLM:\software\microsoft\ccm -Name TempDir | Select-Object TempDir -ExpandProperty TempDir           
+$CCMLogdirectory = Get-ItemProperty -Path HKLM:\Software\Microsoft\CCM\Logging\@global -Name LogDirectory | Select-Object logdirectory -ExpandProperty Logdirectory 
+$CCMTempDir = Get-ItemProperty -Path HKLM:\Software\Microsoft\CCM -Name TempDir | Select-Object TempDir -ExpandProperty TempDir           
 $LogsZip = $CCMTempDir + "logs.zip"
 $CCMFilestoZip = $CCMTempDir + "logs"
-$ClientCommunicationMode = Get-WmiObject -Class "CCM_ClientSiteMode" -Namespace "ROOT\ccm" | Select-Object CommunicationMode -ExpandProperty CommunicationMode # 1 = intranet 2= Deprecated. We don't have always intranet client anymore 3=Internet 4=Always internet
+$ClientCommunicationMode = Get-WmiObject -Class "CCM_ClientSiteMode" -Namespace "ROOT\CCM" | Select-Object CommunicationMode -ExpandProperty CommunicationMode # 1 = intranet 2= Deprecated. We don't have always intranet client anymore 3=Internet 4=Always internet
 
 function BuildAndSend-Registration {
     Param ([string]$ManagementPointHostName, [int]$msgid, [string]$InsString1, [string]$InsString2, [string]$InsString3, [string]$InsString4, [string]$InsString5, [string]$InsString6)
@@ -268,11 +268,11 @@ If ($DumpSystemAppLog -eq 'Yes') {
 If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 
 
-    Copy-Item -path $env:windir\logs\cbs -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
-    Copy-Item -path $env:windir\logs\dism -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -Path $env:windir\logs\cbs -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -Path $env:windir\logs\dism -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Panther | Out-Null
-    Copy-Item -path $env:windir\panther -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
-    Copy-Item -path $env:windir\panther -Filter *.XML -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -Path $env:windir\panther -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -Path $env:windir\panther -Filter *.XML -Destination $CCMTempDir\logs -Recurse -Force | out-null
     Invoke-Expression -Command "pnputil /enum-drivers >$CCMTempDir\logs\pnpdrivers.log" 
 
 
