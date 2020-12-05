@@ -36,7 +36,7 @@ $HttpMode = $null
 $ClientCommunicationMode = $null
 $NumericDate = Get-Date -uFormat "%m%d%Y%H%MS"            
 $UplodadFileName = "$env:Computername-$numericdate.zip"
-$CCMLogdirectory = Get-ItemProperty -Path HKLM:\Software\Microsoft\CCM\Logging\@global -Name LogDirectory | Select-Object logdirectory -ExpandProperty Logdirectory 
+$CCMLogdirectory = Get-ItemProperty -Path HKLM:\Software\Microsoft\CCM\Logging\@global -Name LogDirectory | Select-Object LogDirectory -ExpandProperty LogDirectory 
 $CCMTempDir = Get-ItemProperty -Path HKLM:\Software\Microsoft\CCM -Name TempDir | Select-Object TempDir -ExpandProperty TempDir           
 $LogsZip = $CCMTempDir + "logs.zip"
 $CCMFilestoZip = $CCMTempDir + "logs"
@@ -56,41 +56,41 @@ function BuildAndSend-Registration {
         Return
     }
     
-    $script:httpsender = New-Object Microsoft.ConfigurationManagement.Messaging.Sender.Ccm.CcmSender
+    $Script:httpsender = New-Object Microsoft.ConfigurationManagement.Messaging.Sender.Ccm.CcmSender
 
     # Rolling the time back to account for the default time zone in PE being Pacific
     $ThreeHoursAgoInWmiDateTimeFormat = [System.Management.ManagementDateTimeConverter]::ToDmtfDateTime($(Get-Date).AddHours(-5))
 
-    $unknownstatusmessage = New-Object Microsoft.ConfigurationManagement.Messaging.StatusMessages.UnknownStatusMessage
-    $unknownstatusmessage.ModuleName = 'CCMLogGatherer'
-    $unknownstatusmessage.ComponentName = 'CCMLogGatherer'
-    $unknownstatusmessage.MessageId = $msgid
-    $unknownstatusmessage.SiteCode = $Sitecode
-    $unknownstatusmessage.InsertionString1 = $InsString1
-    $unknownstatusmessage.InsertionString2 = $InsString2
-    $unknownstatusmessage.InsertionString3 = $InsString3
-    $unknownstatusmessage.InsertionString4 = $InsString4
-    $unknownstatusmessage.InsertionString5 = $InsString5
-    $unknownstatusmessage.InsertionString6 = $InsString6
+    $UnknownStatusMessage = New-Object Microsoft.ConfigurationManagement.Messaging.StatusMessages.UnknownStatusMessage
+    $UnknownStatusMessage.ModuleName = 'CCMLogGatherer'
+    $UnknownStatusMessage.ComponentName = 'CCMLogGatherer'
+    $UnknownStatusMessage.MessageId = $msgid
+    $UnknownStatusMessage.SiteCode = $Sitecode
+    $UnknownStatusMessage.InsertionString1 = $InsString1
+    $UnknownStatusMessage.InsertionString2 = $InsString2
+    $UnknownStatusMessage.InsertionString3 = $InsString3
+    $UnknownStatusMessage.InsertionString4 = $InsString4
+    $UnknownStatusMessage.InsertionString5 = $InsString5
+    $UnknownStatusMessage.InsertionString6 = $InsString6
 
 
-    $statusMessage = New-Object Microsoft.ConfigurationManagement.Messaging.Messages.ConfigMgrStatusMessage
+    $StatusMessage = New-Object Microsoft.ConfigurationManagement.Messaging.Messages.ConfigMgrStatusMessage
    
     #add mp name
-    $statusMessage.Settings.HostName = $ManagementPointHostName
-    $statusMessage.Settings.HttpPort = 80
-    $statusMessage.Settings.HttpsPort = 443
-    $statusMessage.Settings.MessageSourceType = [Microsoft.ConfigurationManagement.Messaging.Framework.MessageSourceType]::Client
-    $statusMessage.Settings.SecurityMode = [Microsoft.ConfigurationManagement.Messaging.Framework.MessageSecurityMode]::httpmode
-    $statusMessage.Settings.OverrideValidityChecks = $true
-    $statusMessage.ParseStatusMessage($unknownstatusmessage)
-    $statusMessage.SendMessage($httpsender)
+    $StatusMessage.Settings.HostName = $ManagementPointHostName
+    $StatusMessage.Settings.HttpPort = 80
+    $StatusMessage.Settings.HttpsPort = 443
+    $StatusMessage.Settings.MessageSourceType = [Microsoft.ConfigurationManagement.Messaging.Framework.MessageSourceType]::Client
+    $StatusMessage.Settings.SecurityMode = [Microsoft.ConfigurationManagement.Messaging.Framework.MessageSecurityMode]::httpmode
+    $StatusMessage.Settings.OverrideValidityChecks = $true
+    $StatusMessage.ParseStatusMessage($UnknownStatusMessage)
+    $StatusMessage.SendMessage($httpsender)
 
     # format string
-    $PSArgsArray = @($unknownstatusmessage.ModuleName, $unknownstatusmessage.ComponentName, $unknownstatusmessage.MessageId, $unknownstatusmessage.SiteCode, $unknownstatusmessage.DateTime, $unknownstatusmessage.InsertionString1, `
-            $unknownstatusmessage.InsertionString2, $unknownstatusmessage.InsertionString3, $unknownstatusmessage.InsertionString4, $unknownstatusmessage.InsertionString5, $unknownstatusmessage.InsertionString6, $unknownstatusmessage.Attribute403, `
-            $statusMessage.Settings.HostName, $statusMessage.Settings.HttpPort)
-    $writeoutput = "'" + [string]::join("','", $PSArgsArray) + "'"
+    $PSArgsArray = @($UnknownStatusMessage.ModuleName, $UnknownStatusMessage.ComponentName, $UnknownStatusMessage.MessageId, $UnknownStatusMessage.SiteCode, $UnknownStatusMessage.DateTime, $UnknownStatusMessage.InsertionString1, `
+            $UnknownStatusMessage.InsertionString2, $UnknownStatusMessage.InsertionString3, $UnknownStatusMessage.InsertionString4, $UnknownStatusMessage.InsertionString5, $UnknownStatusMessage.InsertionString6, $UnknownStatusMessage.Attribute403, `
+            $StatusMessage.Settings.HostName, $StatusMessage.Settings.HttpPort)
+    $WriteOutput = "'" + [string]::join("','", $PSArgsArray) + "'"
 
     Write-Verbose "Sending Status MSG: $writeoutput"
     $SentstatusMessage = $true
@@ -124,7 +124,7 @@ Function New-ZipFile {
         Add-Type -As System.IO.Compression.FileSystem
         # Make sure the folder already exists
         [string]$File = Split-Path $ZipFilePath -Leaf
-        [string]$Folder = $(if ($Folder = Split-Path $ZipFilePath) { Resolve-Path $Folder } else { $Pwd })
+        [string]$Folder = $(If ($Folder = Split-Path $ZipFilePath) { Resolve-Path $Folder } Else { $Pwd })
         $ZipFilePath = Join-Path $Folder $File
         # If they don't want to append, make sure the zip file doesn't already exist.
         If (!$Append) {
@@ -133,16 +133,16 @@ Function New-ZipFile {
         $Archive = [System.IO.Compression.ZipFile]::Open( $ZipFilePath, "Update" )
     }
     Process {
-        ForEach ($path in $InputObject) {
-            ForEach ($item in Resolve-Path $path) {
+        ForEach ($Path in $InputObject) {
+            ForEach ($Item in Resolve-Path $Path) {
                 # Push-Location so we can use Resolve-Path -Relative
-                Push-Location (Split-Path $item)
+                Push-Location (Split-Path $Item)
                 # This will get the file, or all the files in the folder (recursively)
-                ForEach ($file in Get-ChildItem $item -Recurse -File -Force | ForEach-Object FullName) {
+                ForEach ($file in Get-ChildItem $Item -Recurse -File -Force | ForEach-Object FullName) {
                     # Calculate the relative file path
-                    $relative = (Resolve-Path $file -Relative).TrimStart(".\")
+                    $Relative = (Resolve-Path $File -Relative).TrimStart(".\")
                     # Add the file to the zip
-                    $Null = [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($Archive, $file, $relative, $Compression)
+                    $Null = [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile($Archive, $File, $Relative, $Compression)
                 }
                 Pop-Location
             }
