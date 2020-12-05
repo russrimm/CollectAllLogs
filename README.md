@@ -10,6 +10,8 @@ The logs which are currently collectable by this solution are as follows:
 - Windows Defender
 - Edge Updates
 - Windows Servicing (from in-place upgrades)
+- DISM (Deployment Image Servicing and Management)
+- CBS (Component Based Servicing)
 - OneDrive
 - System Eventlog
 - PNP Driver Package enumeration
