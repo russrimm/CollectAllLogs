@@ -43,7 +43,7 @@ $CCMFilestoZip = $CCMTempDir + "logs"
 $ClientCommunicationMode = Get-WmiObject -Class "CCM_ClientSiteMode" -Namespace "ROOT\CCM" | Select-Object CommunicationMode -ExpandProperty CommunicationMode # 1 = intranet 2= Deprecated. We don't have always intranet client anymore 3=Internet 4=Always internet
 
 function BuildAndSend-Registration {
-    Param ([string]$ManagementPointHostName, [int]$msgid, [string]$InsString1, [string]$InsString2, [string]$InsString3, [string]$InsString4, [string]$InsString5, [string]$InsString6)
+    Param ([string]$ManagementPointHostName, [int]$MsgId, [string]$InsString1, [string]$InsString2, [string]$InsString3, [string]$InsString4, [string]$InsString5, [string]$InsString6)
 
     Write-Verbose "Building Registration to $ManagementPointHostName"
     If ((Test-Path -Path "$CCMTempDir\Microsoft.ConfigurationManagement.Messaging.dll")) {
@@ -64,7 +64,7 @@ function BuildAndSend-Registration {
     $UnknownStatusMessage = New-Object Microsoft.ConfigurationManagement.Messaging.StatusMessages.UnknownStatusMessage
     $UnknownStatusMessage.ModuleName = 'CCMLogGatherer'
     $UnknownStatusMessage.ComponentName = 'CCMLogGatherer'
-    $UnknownStatusMessage.MessageId = $msgid
+    $UnknownStatusMessage.MessageId = $MsgId
     $UnknownStatusMessage.SiteCode = $Sitecode
     $UnknownStatusMessage.InsertionString1 = $InsString1
     $UnknownStatusMessage.InsertionString2 = $InsString2
@@ -447,7 +447,7 @@ Else {
 }
 
 if ($SendStatusMessage -eq 'Yes') {
-    $SentstatusMessage = BuildAndSend-Registration -ManagementPointHostName $MP -msgid 1234 -InsString1 $MP -InsString2 $UplodadFileName  -InsString3 "Insstring3"  -InsString4 "Insstring4"  -InsString5 "Insstring5"  -InsString6 "Insstring6"
+    $SentstatusMessage = BuildAndSend-Registration -ManagementPointHostName $MP -MsgId 1234 -InsString1 $MP -InsString2 $UplodadFileName  -InsString3 "Insstring3"  -InsString4 "Insstring4"  -InsString5 "Insstring5"  -InsString6 "Insstring6"
 }
 
 
