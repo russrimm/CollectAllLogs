@@ -10,13 +10,13 @@ The logs which are currently collectable by this solution are as follows:
 * Windows Servicing (from in-place upgrades)
 * OneDrive
 * System Eventlog
-* OEM Driver Package enumeration
+* PNP Driver Package enumeration
+* PNP Device enumeration
 * Application Eventlog
 * MDMDiagnosticsTool outputs for
   - Autopilot
   - Device Provisioning
 * Intune Management Extension
-* PNP
 * Symantec Antivirus Exclusions
 
 1. Copy Microsoft.ConfigurationManagement.Messaging.dll to <ConfigMgr Installation Dir>\CCM\Incoming\MessagingDll and \SMS_CCM\Temp on each Management Point
