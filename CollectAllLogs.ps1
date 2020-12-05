@@ -192,7 +192,7 @@ If (Test-Path -Path $LogsZip) {
 #Gather SystemInfo output
 If ($GatherSystemInfo -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\SystemInfo | Out-Null
-    Invoke-Expression "systeminfo.exe > $CCMTempDir\logs\SystemInfo" | Out-Null
+    Invoke-Expression -Command "$env:windir\System32\systeminfo.exe >$CCMTempDir\logs\SystemInfo\SystemInfo.log"
 }
 
 #Gather SCCM Client Logs
