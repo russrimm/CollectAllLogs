@@ -195,15 +195,15 @@ If ($GatherBaseSCCMLogs -eq 'Yes') {
 
 If ($GatherWindowsUpdateLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\WindowsUpdate | Out-Null
-    $OSversion = (Get-WmiObject -namespace root\cimv2 -Class win32_operatingsystem).version
+    $OSversion = (Get-WmiObject -Namespace Root\Cimv2 -Class Win32_OperatingSystem).Version
     If ($OSversion -like "10.*") {
-        If ( -not ( Test-Path alias:out-default ) ) { New-Alias Out-Default Write-Verbose -Scope global } #Hack get-windowsUpdate writing to Out-Default instead of best practive of Write-host,etc
+        If ( -not ( Test-Path alias:out-default ) ) { New-Alias Out-Default Write-Verbose -Scope Global } #Hack get-windowsUpdate writing to Out-Default instead of best practive of Write-host,etc
         Get-WindowsUpdateLog -LogPath $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log | out-null
         Remove-Item alias:Out-Default -Force -EA SilentlyContinue | Out-Null #Clean out hack to workaround out-default issue with Get-WindowsUpdate
     }
 
     Else {
-        Copy-Item -path $env:windir\WindowsUpdate.log -Destination $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log -Force | Out-Null
+        Copy-Item -Path $env:windir\WindowsUpdate.log -Destination $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log -Force | Out-Null
     }
 }
 
