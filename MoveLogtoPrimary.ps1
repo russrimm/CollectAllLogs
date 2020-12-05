@@ -11,8 +11,8 @@ $CMGConnected = $false
 
 
 Function DetermineIfCMG {
-    param([string]$MP)
-    if ($MP -match "CCM_PROXY_MUTUALAUTH") {
+    Param([string]$MP)
+    If ($MP -match "CCM_PROXY_MUTUALAUTH") {
         $CMGConnected = $true
         $MPIndex = $InsString1.IndexOf('/')
         $MP = $MP.Substring(0, $MPIndex)
@@ -31,12 +31,12 @@ Function DetermineIfCMG {
 
 Function get-CCMIncominglocation {
     If (get-wmiobject -ComputerName $InsString1 -namespace root -class __NAMESPACE -filter "name='MicrosoftIISv2'") {
-        $CCMInComingIISV2 = Get-WmiObject -Class "IIsWebVirtualDirSetting" -ComputerName $InsString1 -Namespace 'ROOT\MicrosoftIISv2' | where name -eq 'W3SVC/1/ROOT/CCM_Incoming' | select path
+        $CCMInComingIISV2 = Get-WmiObject -Class "IIsWebVirtualDirSetting" -ComputerName $InsString1 -Namespace 'ROOT\MicrosoftIISv2' | Where-Object name -eq 'W3SVC/1/ROOT/CCM_Incoming' | Select-Object path
         $CCMIncomingPath = $CCMInComingIISV2.path
     }
 
     ElseIf (get-wmiobject -ComputerName $InsString1 -namespace root -class __NAMESPACE -filter "name='WebAdministration'") {
-        $CCMIncomingWebAdminPath = Get-WmiObject -Class 'VirtualDirectory' -ComputerName $InsString1 -Namespace 'ROOT\WebAdministration' | where applicationpath -eq  '/CCM_Incoming' | Select PhysicalPath
+        $CCMIncomingWebAdminPath = Get-WmiObject -Class 'VirtualDirectory' -ComputerName $InsString1 -Namespace 'ROOT\WebAdministration' | Where-Object applicationpath -eq  '/CCM_Incoming' | Select-Object PhysicalPath
         $CCMIncomingPath = $CCMIncomingPath.PhysicalPath
     }
     Else {
