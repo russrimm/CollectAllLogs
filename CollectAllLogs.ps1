@@ -12,7 +12,7 @@ param(
 #>
 
 
-
+$GatherSystemInfo = 'Yes'
 $GatherBaseSCCMLogs = 'Yes'
 $GatherWindowsUpdateLogs = 'Yes'
 $GatherDefenderLogs = 'Yes'
@@ -189,10 +189,18 @@ If (Test-Path -Path $LogsZip) {
     Remove-Item $LogsZip -Force
 }
 
+#Gather SystemInfo output
+If ($GatherSystemInfo -eq 'Yes') {
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\SystemInfo | Out-Null
+    Invoke-Expression "systeminfo.exe > $CCMTempDir\logs\SystemInfo" | Out-Null
+}
+
+#Gather SCCM Client Logs
 If ($GatherBaseSCCMLogs -eq 'Yes') {
     Copy-Item -Path $CCMLogdirectory -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
 }
 
+#Gather WindowsUpdate Logs
 If ($GatherWindowsUpdateLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\WindowsUpdate | Out-Null
     $OSversion = (Get-WmiObject -Namespace Root\Cimv2 -Class Win32_OperatingSystem).Version
@@ -207,21 +215,25 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
     }
 }
 
+#Gather Windows Defender Logs
 If ($GatherDefenderLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Defender | Out-Null
     Copy-Item -Path '$env:ProgramData\Microsoft\Windows Defender\Support\*.log' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
 }
 
+#Gather OneDrive Logs
 If ($GatherOneDriveLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\OneDrive | Out-Null
     Copy-Item -Path '$env:ProgramData\Microsoft OneDrive\Setup\logs\*.log' -Destination $CCMTempDir\logs\OneDrive -Force -Recurse | Out-Null
 }
 
+#Gather Edge Update Logs
 If ($GatherEdgeUpdateLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\EdgeUpdate | Out-Null
     Copy-Item -Path 'C:\Users\All Users\Microsoft\EdgeUpdate\Log\*.log' -Destination $CCMTempDir\logs\EdgeUpdate -Force -Recurse | Out-Null
 }
 
+#Gather System Eventlogs
 If ($DumpSystemEventLog -eq 'Yes') {
     # Config
     $logFileName = "System" # Add Name of the Logfile (System, Application, etc)
@@ -244,6 +256,7 @@ If ($DumpSystemEventLog -eq 'Yes') {
     #Clear-Eventlog -LogName $logFileName
 }
 
+#Gather Application EventLogs
 If ($DumpSystemAppLog -eq 'Yes') {
     # Config
     $logFileName = "Application" # Add Name of the Logfile (System, Application, etc)
@@ -265,6 +278,7 @@ If ($DumpSystemAppLog -eq 'Yes') {
     #Clear-Eventlog -LogName $logFileName
 }
 
+#Gather Windows Servicing (In-Place Upgrade) Logs
 If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 
 
@@ -292,6 +306,7 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
     }
 }
 
+#Gather MDM Diagnostics Logs
 If ($GatherMDMDiagnostics -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\MDMLogs | Out-Null
     Copy-Item -Path $env:ProgramData\Microsoft\IntuneManagementExtension\Logs\*.log $CCMTempDir\logs\MDMLogs | Out-Null
@@ -304,6 +319,7 @@ If ($GatherMDMDiagnostics -eq 'Yes') {
     }
 }
 
+#Gather Symantec Antivirus Exclusions
 If ($GatherSepExclusions -eq 'Yes') {
 
     If (Test-Path 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Directory\Admin') {
@@ -404,10 +420,10 @@ If ($HttpMode -eq "http://") {
 }
 
 Else {
-    #MP is using https and needs a cert attached for any bits jobs
+    #MP is using https and needs a cert attached for any BITS jobs
     $Cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -Like "*$env:ComputerName*" -and $_.NotAfter -gt (Get-Date) -and $_.EnhancedKeyUsageList.ObjectId -eq "1.3.6.1.5.5.7.3.2" }
     If ($Cert.Count -gt 1) { $Cert = $Cert[0] }
-    $CertSubjectName = $Cert.Subject -replace "(CN=)(.*?),.*", '$2' 
+    $CertSubjectName = $Cert.Subject -Replace "(CN=)(.*?),.*", '$2' 
 
 
     $OSversion = (Get-WmiObject -Namespace Root\Cimv2 -Class Win32_OperatingSystem).Version
@@ -421,7 +437,7 @@ Else {
 
     # if (Get-ChildItem Cert:\LocalMachine\My -DnsName $CertSubjectName |where EnhancedKeyUsageList -Like '*Client Authentication*'|Test-Certificate -AllowUntrustedRoot) #Verify Machine has a certificate that we can attach to the bits job
     If ($HasCert = $True) {
-        #Verify Machine has a certificate that we can attach to the bits job
+        #Verify Machine has a certificate that we can attach to the BITS job
         If ($SendStatusMessage -eq 'Yes') {
             #Code for Status Message trigger if desired to get Microsoft.ConfigurationManagement.Messaging.dll
             If (!(Test-Path -Path "$CCMTempDir\Microsoft.ConfigurationManagement.Messaging.dll")) {
