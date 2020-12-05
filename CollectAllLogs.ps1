@@ -155,13 +155,14 @@ Function New-ZipFile {
     }
 }
 
-If ($ClientCommunicationMode -eq 1) { #Intranet
-    $MP = Get-WmiObject -Class "CCM_Authority" -Namespace "ROOT\ccm" | Where index -eq 1 | Select CurrentManagementPoint -ExpandProperty CurrentManagementPoint
+If ($ClientCommunicationMode -eq 1) {
+    #Intranet
+    $MP = Get-WmiObject -Class "CCM_Authority" -Namespace "ROOT\ccm" | Where-Object index -eq 1 | Select-Object CurrentManagementPoint -ExpandProperty CurrentManagementPoint
     If ($MP -eq $null) {
         Write-Host "Unable to determine current Management for CCM_Authority"
     }
     If ($MP -ne $null) {
-        $MPCapability = Get-WmiObject -Class "SMS_ActiveMPCandidate"  -Namespace "ROOT\ccm\LocationServices" | Where index -eq 1 | Where MP -eq $MP | Select Capabilities -ExpandProperty Capabilities
+        $MPCapability = Get-WmiObject -Class "SMS_ActiveMPCandidate"  -Namespace "ROOT\ccm\LocationServices" | Where-Object index -eq 1 | Where-Object MP -eq $MP | Select-Object Capabilities -ExpandProperty Capabilities
         If ($MPCapability.Contains("63")) {
             $HttpMode = "https://"
         }
@@ -172,9 +173,10 @@ If ($ClientCommunicationMode -eq 1) { #Intranet
     }
 }
 
-If (($ClientCommunicationMode -eq 4) -or ($ClientCommunicationMode -eq 3)) { #Always Internet
+If (($ClientCommunicationMode -eq 4) -or ($ClientCommunicationMode -eq 3)) {
+    #Always Internet
    
-    $MP = Get-WmiObject -Class "SMS_ActiveMPCandidate" -Namespace "ROOT\ccm\LocationServices" | Select-Object -First 1 | Select MP -Expand MP
+    $MP = Get-WmiObject -Class "SMS_ActiveMPCandidate" -Namespace "ROOT\ccm\LocationServices" | Select-Object -First 1 | Select-Object MP -Expand MP
     $HttpMode = "https://"
 }
 
@@ -194,26 +196,26 @@ If ($GatherBaseSCCMLogs -eq 'Yes') {
 
 If ($GatherWindowsUpdateLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\WindowsUpdate | Out-Null
-    $OSversion = (gwmi -namespace root\cimv2 -Class win32_operatingsystem).version
-    IF ($OSversion -like "10.*") {
-        IF ( -not ( Test-Path alias:out-default ) ) { New-Alias Out-Default Write-Verbose -Scope global } #Hack get-windowsUpdate writing to Out-Default instead of best practive of Write-host,etc
+    $OSversion = (Get-WmiObject -namespace root\cimv2 -Class win32_operatingsystem).version
+    If ($OSversion -like "10.*") {
+        If ( -not ( Test-Path alias:out-default ) ) { New-Alias Out-Default Write-Verbose -Scope global } #Hack get-windowsUpdate writing to Out-Default instead of best practive of Write-host,etc
         Get-WindowsUpdateLog -LogPath $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log | out-null
         Remove-Item alias:Out-Default -Force -EA SilentlyContinue | Out-Null #Clean out hack to workaround out-default issue with Get-WindowsUpdate
     }
 
     Else {
-        Copy-Item -path C:\windows\WindowsUpdate.log -Destination $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log -Force | Out-Null
+        Copy-Item -path $env:windir\WindowsUpdate.log -Destination $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log -Force | Out-Null
     }
 }
 
 If ($GatherDefenderLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Defender | Out-Null
-    Copy-Item -Path 'C:\ProgramData\Microsoft\Windows Defender\Support\*.log' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
+    Copy-Item -Path '$env:ProgramData\Microsoft\Windows Defender\Support\*.log' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
 }
 
 If ($GatherOneDriveLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\OneDrive | Out-Null
-    Copy-Item -Path 'C:\ProgramData\Microsoft OneDrive\Setup\logs\*.log' -Destination $CCMTempDir\logs\OneDrive -Force -Recurse | Out-Null
+    Copy-Item -Path '$env:ProgramData\Microsoft OneDrive\Setup\logs\*.log' -Destination $CCMTempDir\logs\OneDrive -Force -Recurse | Out-Null
 }
 
 If ($GatherEdgeUpdateLogs -eq 'Yes') {
@@ -267,12 +269,11 @@ If ($DumpSystemAppLog -eq 'Yes') {
 If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 
 
-    Copy-Item -path c:\windows\logs\cbs -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
-    Copy-Item -path c:\windows\logs\dism -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -path $env:windir\logs\cbs -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -path $env:windir\logs\dism -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Panther | Out-Null
-    Copy-Item -path c:\windows\panther -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
-    Copy-Item -path c:\windows\panther -Filter *.XML -Destination $CCMTempDir\logs -Recurse -Force | out-null
-    #pnputil /enum-drivers >$CCMTempDir\logs\pnpdrivers.log
+    Copy-Item -path $env:windir\panther -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -path $env:windir\panther -Filter *.XML -Destination $CCMTempDir\logs -Recurse -Force | out-null
     Invoke-Expression -Command "pnputil /enum-drivers >$CCMTempDir\logs\pnpdrivers.log" 
 
 
@@ -293,7 +294,7 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 
 If ($GatherMDMDiagnostics -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\MDMLogs | Out-Null
-    Copy-Item -Path C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\*.log $CCMTempDir\logs\MDMLogs | Out-Null
+    Copy-Item -Path $env:ProgramData\Microsoft\IntuneManagementExtension\Logs\*.log $CCMTempDir\logs\MDMLogs | Out-Null
     $areas = Get-ChildItem HKLM:Software\Microsoft\MDMDiagnostics\Area
     ForEach ($area in $areas) {
         If ($area.Name -notlike "*TPM") {
@@ -401,7 +402,8 @@ If ($HttpMode -eq "http://") {
     # write-host "Uploaded Client Logs to $destination/$UplodadFileName"
 }
 
-Else { #MP is using https and needs a cert attached for any bits jobs
+Else {
+    #MP is using https and needs a cert attached for any bits jobs
     $Cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -Like "*$env:computername*" -and $_.NotAfter -gt (Get-Date) -and $_.EnhancedKeyUsageList.ObjectId -eq "1.3.6.1.5.5.7.3.2" }
     If ($Cert.Count -gt 1) { $Cert = $Cert[0] }
     $CertSubjectName = $Cert.Subject -replace "(CN=)(.*?),.*", '$2' 
@@ -409,15 +411,16 @@ Else { #MP is using https and needs a cert attached for any bits jobs
 
     $OSversion = (Get-WmiObject -Namespace Root\Cimv2 -Class Win32_OperatingSystem).Version
     If ($OSversion -like "6.1*") {
-        $HasCert = [bool](Get-ChildItem Cert:\LocalMachine\My | Where Subject -Like "*$CertSubjectName")  #Can't use newer CMDLet method on Windows 7
+        $HasCert = [bool](Get-ChildItem Cert:\LocalMachine\My | Where-Object Subject -Like "*$CertSubjectName")  #Can't use newer CMDLet method on Windows 7
     }
     Else {
-        $HasCert = [bool](Get-ChildItem Cert:\LocalMachine\My -DnsName $CertSubjectName | Where EnhancedKeyUsageList -Like '*Client Authentication*' | Test-Certificate -AllowUntrustedRoot) #Verify Machine has a certificate that we can attach to the bits job
+        $HasCert = [bool](Get-ChildItem Cert:\LocalMachine\My -DnsName $CertSubjectName | Where-Object EnhancedKeyUsageList -Like '*Client Authentication*' | Test-Certificate -AllowUntrustedRoot) #Verify Machine has a certificate that we can attach to the bits job
     }
 
 
     # if (Get-ChildItem Cert:\LocalMachine\My -DnsName $CertSubjectName |where EnhancedKeyUsageList -Like '*Client Authentication*'|Test-Certificate -AllowUntrustedRoot) #Verify Machine has a certificate that we can attach to the bits job
-    If ($HasCert = $True) { #Verify Machine has a certificate that we can attach to the bits job
+    If ($HasCert = $True) {
+        #Verify Machine has a certificate that we can attach to the bits job
         If ($SendStatusMessage -eq 'Yes') {
             #Code for Status Message trigger if desired to get Microsoft.ConfigurationManagement.Messaging.dll
             If (!(Test-Path -Path "$CCMTempDir\Microsoft.ConfigurationManagement.Messaging.dll")) {
