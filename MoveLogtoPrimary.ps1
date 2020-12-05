@@ -31,12 +31,12 @@ Function DetermineIfCMG {
 
 Function get-CCMIncominglocation {
     If (get-wmiobject -ComputerName $InsString1 -namespace root -class __NAMESPACE -filter "name='MicrosoftIISv2'") {
-        $CCMInComingIISV2 = Get-WmiObject -Class "IIsWebVirtualDirSetting" -ComputerName $InsString1 -Namespace 'ROOT\MicrosoftIISv2' | Where-Object name -eq 'W3SVC/1/ROOT/CCM_Incoming' | Select-Object path
+        $CCMInComingIISV2 = Get-WmiObject -Class "IIsWebVirtualDirSetting" -ComputerName $InsString1 -Namespace 'ROOT\MicrosoftIISv2' | Where-Object Name -eq 'W3SVC/1/ROOT/CCM_Incoming' | Select-Object Path
         $CCMIncomingPath = $CCMInComingIISV2.path
     }
 
     ElseIf (get-wmiobject -ComputerName $InsString1 -namespace root -class __NAMESPACE -filter "name='WebAdministration'") {
-        $CCMIncomingWebAdminPath = Get-WmiObject -Class 'VirtualDirectory' -ComputerName $InsString1 -Namespace 'ROOT\WebAdministration' | Where-Object applicationpath -eq  '/CCM_Incoming' | Select-Object PhysicalPath
+        $CCMIncomingWebAdminPath = Get-WmiObject -Class 'VirtualDirectory' -ComputerName $InsString1 -Namespace 'ROOT\WebAdministration' | Where-Object ApplicationPath -eq  '/CCM_Incoming' | Select-Object PhysicalPath
         $CCMIncomingPath = $CCMIncomingPath.PhysicalPath
     }
     Else {
@@ -47,11 +47,11 @@ Function get-CCMIncominglocation {
 
 
 Function DetermineSiteHiearchy {
-    $SiteCode = (Get-WmiObject -Namespace "root\sms" -class "__Namespace").Name
+    $SiteCode = (Get-WmiObject -Namespace "ROOT\SMS" -class "__Namespace").Name
     $computer = $env:COMPUTERNAME
     $FQDNSystemName = [System.Net.Dns]::GetHostByName(($env:computerName)) | Select-Object Hostname -ExpandProperty Hostname
     $CASServerName = $null
-    $CASServerName = Get-WmiObject -Class 'SMS_Site' -ComputerName $computer -Namespace "ROOT\SMS\$SiteCode" | Where-Object Type -eq 4 | Select-Object servername -ExpandProperty servername
+    $CASServerName = Get-WmiObject -Class 'SMS_Site' -ComputerName $computer -Namespace "ROOT\SMS\$SiteCode" | Where-Object Type -eq 4 | Select-Object Servername -ExpandProperty servername
     Return $CASServerName
 }
 
