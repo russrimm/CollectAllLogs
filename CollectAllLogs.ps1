@@ -35,7 +35,7 @@ $MP = $null
 $HttpMode = $null
 $ClientCommunicationMode = $null
 $NumericDate = Get-Date -uFormat "%m%d%Y%H%MS"            
-$UplodadFileName = "$env:Computername-$numericdate.zip"
+$UplodadFileName = "$env:ComputerName-$numericdate.zip"
 $CCMLogdirectory = Get-ItemProperty -Path HKLM:\Software\Microsoft\CCM\Logging\@global -Name LogDirectory | Select-Object LogDirectory -ExpandProperty LogDirectory 
 $CCMTempDir = Get-ItemProperty -Path HKLM:\Software\Microsoft\CCM -Name TempDir | Select-Object TempDir -ExpandProperty TempDir           
 $LogsZip = $CCMTempDir + "logs.zip"
@@ -198,7 +198,7 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
     $OSversion = (Get-WmiObject -Namespace Root\Cimv2 -Class Win32_OperatingSystem).Version
     If ($OSversion -like "10.*") {
         If ( -not ( Test-Path alias:out-default ) ) { New-Alias Out-Default Write-Verbose -Scope Global } #Hack get-windowsUpdate writing to Out-Default instead of best practive of Write-host,etc
-        Get-WindowsUpdateLog -LogPath $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log | out-null
+        Get-WindowsUpdateLog -LogPath $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log | Out-Null
         Remove-Item alias:Out-Default -Force -EA SilentlyContinue | Out-Null #Clean out hack to workaround out-default issue with Get-WindowsUpdate
     }
 
@@ -251,11 +251,11 @@ If ($DumpSystemAppLog -eq 'Yes') {
     $path = "$CCMTempDir\logs\EventLogs\" # Add Path, needs to end with a backsplash
 
     # do not edit
-    $exportFileName = $logFileName + (get-date -f yyyyMMdd) + ".evt"
+    $exportFileName = $logFileName + (Get-Date -f yyyyMMdd) + ".evt"
     $logFile = Get-WmiObject Win32_NTEventlogFile | Where-Object { $_.logfilename -eq $logFileName }
     $logFile.backupeventlog($path + $exportFileName) | Out-Null
 
-    # Deletes all .evt logfiles in $path
+    # Deletes all .evt logfiles in $Path
     # Be careful, this script removes all files with the extension .evt not just the selfcreated logfiles
     $Daysback = "-7"
 
@@ -268,17 +268,18 @@ If ($DumpSystemAppLog -eq 'Yes') {
 If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 
 
-    Copy-Item -Path $env:windir\logs\cbs -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
-    Copy-Item -Path $env:windir\logs\dism -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -Path $env:windir\logs\CBS -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
+    Copy-Item -Path $env:windir\logs\DISM -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Panther | Out-Null
-    Copy-Item -Path $env:windir\panther -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | out-null
-    Copy-Item -Path $env:windir\panther -Filter *.XML -Destination $CCMTempDir\logs -Recurse -Force | out-null
+    Copy-Item -Path $env:windir\panther -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
+    Copy-Item -Path $env:windir\panther -Filter *.XML -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
     Invoke-Expression -Command "pnputil /enum-drivers >$CCMTempDir\logs\pnpdrivers.log" 
+    Invoke-Expression -Command "pnputil /enum-devices >$CCMTempDir\logs\pnpdevices.log"
 
 
     #Gather log Files from C:\~BT
     If (Test-Path C:\~BT) {
-        Copy-Item -path C:\~BT -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
+        Copy-Item -Path C:\~BT -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
 
     }
 
@@ -403,7 +404,7 @@ If ($HttpMode -eq "http://") {
 
 Else {
     #MP is using https and needs a cert attached for any bits jobs
-    $Cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -Like "*$env:computername*" -and $_.NotAfter -gt (Get-Date) -and $_.EnhancedKeyUsageList.ObjectId -eq "1.3.6.1.5.5.7.3.2" }
+    $Cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -Like "*$env:ComputerName*" -and $_.NotAfter -gt (Get-Date) -and $_.EnhancedKeyUsageList.ObjectId -eq "1.3.6.1.5.5.7.3.2" }
     If ($Cert.Count -gt 1) { $Cert = $Cert[0] }
     $CertSubjectName = $Cert.Subject -replace "(CN=)(.*?),.*", '$2' 
 
@@ -432,7 +433,7 @@ Else {
             #End code for Status Message trigger
         }
 
-        $BitsJobName = "$env:computername-$numericdate.zip"
+        $BitsJobName = "$env:ComputerName-$numericdate.zip"
         $BitsJob = Start-BitsTransfer -DisplayName $BitsJobName -Source $LogsZip -Destination "$destination\$UplodadFileName" -TransferType Upload -Suspended
         BitsAdmin /setclientCertificatebyName $BitsJobName 2 MY $CertSubjectName | Out-Null #Using BitsAdmin to attach cert because can't do it with PowerShell Cmdlet
         Resume-BitsTransfer -BitsJob $BitsJob
@@ -452,4 +453,4 @@ if ($SendStatusMessage -eq 'Yes') {
 
 
 If ($UploadedClientLogs = $true)
-{ Write-Host "Uploaded Client Logs to $destination/$UplodadFileName and sent Status Message $SentstatusMessage Regpol CreationDate $FileDate" }
+{ Write-Host "Uploaded Client Logs to $destination/$UplodadFileName and sent Status Message $SentstatusMessage" }
