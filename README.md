@@ -3,9 +3,19 @@ CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (
 a management point, and send a status message of **1234** which in turn will cause the primary to copy the zip from the management point to an output directory of choice to store all of the zipped up logs.
 
 The logs which are currently collectable by this solution are as follows:
-| SCCM Client | 
-| WindowsUpdate | 
-| Windows Defender |
+* SCCM Client
+* WindowsUpdate
+* Windows Defender
+* Edge Updates
+* Windows Servicing (from in-place upgrades)
+* OneDrive
+* System Eventlog
+* Application Eventlog
+* MDMDiagnosticsTool outputs for
+  - Autopilot
+  - Device Provisioning
+* Intune Management Extension
+* Symantec Antivirus Exclusions
 
 1. Copy Microsoft.ConfigurationManagement.Messaging.dll to <ConfigMgr Installation Dir>\CCM\Incoming\MessagingDll and \SMS_CCM\Temp on each Management Point
 2. Create a new “Run Script” using the contents of the script “CollectAllLogs.ps1”.
