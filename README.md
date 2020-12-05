@@ -16,6 +16,7 @@ The logs which are currently collectable by this solution are as follows:
 * MDMDiagnosticsTool outputs for
   - Autopilot
   - Device Provisioning
+  - Device Enrollment
 * Intune Management Extension
 * Symantec Antivirus Exclusions
 
