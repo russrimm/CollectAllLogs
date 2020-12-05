@@ -29,13 +29,13 @@ Function DetermineIfCMG {
 
 }
 
-Function get-CCMIncominglocation {
-    If (get-wmiobject -ComputerName $InsString1 -namespace root -class __NAMESPACE -filter "name='MicrosoftIISv2'") {
+Function Get-CCMIncominglocation {
+    If (Get-Wmiobject -ComputerName $InsString1 -Namespace Root -Class __NAMESPACE -Filter "Name='MicrosoftIISv2'") {
         $CCMInComingIISV2 = Get-WmiObject -Class "IIsWebVirtualDirSetting" -ComputerName $InsString1 -Namespace 'ROOT\MicrosoftIISv2' | Where-Object Name -eq 'W3SVC/1/ROOT/CCM_Incoming' | Select-Object Path
         $CCMIncomingPath = $CCMInComingIISV2.path
     }
 
-    ElseIf (get-wmiobject -ComputerName $InsString1 -namespace root -class __NAMESPACE -filter "name='WebAdministration'") {
+    ElseIf (Get-WmiObject -ComputerName $InsString1 -Namespace Root -Class __NAMESPACE -filter "name='WebAdministration'") {
         $CCMIncomingWebAdminPath = Get-WmiObject -Class 'VirtualDirectory' -ComputerName $InsString1 -Namespace 'ROOT\WebAdministration' | Where-Object ApplicationPath -eq  '/CCM_Incoming' | Select-Object PhysicalPath
         $CCMIncomingPath = $CCMIncomingPath.PhysicalPath
     }
