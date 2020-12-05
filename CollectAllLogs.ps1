@@ -295,6 +295,7 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 If ($GatherMDMDiagnostics -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\MDMLogs | Out-Null
     Copy-Item -Path $env:ProgramData\Microsoft\IntuneManagementExtension\Logs\*.log $CCMTempDir\logs\MDMLogs | Out-Null
+    MDMDiagnosticstool.exe -out $CCMTempDir\logs\MDMLogs
     $areas = Get-ChildItem HKLM:Software\Microsoft\MDMDiagnostics\Area
     ForEach ($area in $areas) {
         If ($area.Name -notlike "*TPM") {
@@ -305,11 +306,11 @@ If ($GatherMDMDiagnostics -eq 'Yes') {
 
 If ($GatherSepExclusions -eq 'Yes') {
 
-    If (Test-Path 'hklm:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Directory\Admin') {
+    If (Test-Path 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Directory\Admin') {
 
-        $logpath = "$CCMTempDir\logs\Symantec-Exclusions.log"
-        $symantec = Get-Childitem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Directory\Admin\'
-        $results = ForEach ($entry in $symantec) {
+        $LogPath = "$CCMTempDir\logs\Symantec-Exclusions.log"
+        $Symantec = Get-ChildItem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Directory\Admin\'
+        $Results = ForEach ($entry in $Symantec) {
             Set-Location $entry.PSPath
             $var = Get-ItemProperty -Path . 
 
@@ -319,12 +320,12 @@ If ($GatherSepExclusions -eq 'Yes') {
             }
 
         }
-        "ScanningEngines - Directories" | Out-File $logpath
-        $results | Out-File $logpath -Append
+        "ScanningEngines - Directories" | Out-File $LogPath
+        $Results | Out-File $LogPath -Append
 
-        $logpath = "$CCMTempDir\logs\Symantec-Exclusions.log"
-        $symantec = get-childitem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Filename\Admin\'
-        $results = ForEach ($entry in $symantec) {
+        $LogPath = "$CCMTempDir\logs\Symantec-Exclusions.log"
+        $Symantec = Get-ChildItem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Filename\Admin\'
+        $Results = ForEach ($entry in $Symantec) {
             Set-Location $entry.PSPath
             $var = Get-ItemProperty -Path . 
 
@@ -333,12 +334,12 @@ If ($GatherSepExclusions -eq 'Yes') {
             }
 
         }
-        "ScanningEngines - Filename" | Out-File $logpath -Append
-        $results | Out-File $logpath -Append
+        "ScanningEngines - Filename" | Out-File $LogPath -Append
+        $Results | Out-File $LogPath -Append
 
-        $logpath = 'C:\Temp\Symantec-Exclusions.log'
-        $symantec = Get-Childitem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Extensions\Admin'
-        $results = ForEach ($entry in $symantec) {
+        $LogPath = "$CCMTempDir\logs\Symantec-Exclusions.log"
+        $Symantec = Get-ChildItem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\ScanningEngines\Extensions\Admin'
+        $Results = ForEach ($entry in $Symantec) {
             Set-Location $entry.PSPath
             $var = Get-ItemProperty -Path . 
 
@@ -347,12 +348,12 @@ If ($GatherSepExclusions -eq 'Yes') {
             }
 
         }
-        "ScanningEngines - Extensions" | Out-File $logpath -Append
-        $results | Out-File $logpath -Append
+        "ScanningEngines - Extensions" | Out-File $LogPath -Append
+        $Results | Out-File $LogPath -Append
 
-        $logpath = 'C:\Temp\Symantec-Exclusions.log'
-        $symantec = get-childitem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\HeuristicScanning\Directory\Admin'
-        $results = ForEach ($entry in $symantec) {
+        $LogPath = "$CCMTempDir\logs\Symantec-Exclusions.log"
+        $Symantec = Get-ChildItem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\HeuristicScanning\Directory\Admin'
+        $Results = ForEach ($entry in $Symantec) {
             Set-Location $entry.PSPath
             $var = Get-ItemProperty -Path . 
 
@@ -362,12 +363,12 @@ If ($GatherSepExclusions -eq 'Yes') {
             }
 
         }
-        "HeuristicScanning - Directories" | Out-File $logpath -Append
-        $results | Out-File $logpath -Append
+        "HeuristicScanning - Directories" | Out-File $LogPath -Append
+        $Results | Out-File $LogPath -Append
 
-        $logpath = 'C:\Temp\Symantec-Exclusions.log'
-        $symantec = Get-Childitem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\HeuristicScanning\Filename\Admin'
-        $results = ForEach ($entry in $symantec) {
+        $LogPath = "$CCMTempDir\logs\Symantec-Exclusions.log"
+        $Symantec = Get-ChildItem 'HKLM:\SOFTWARE\Wow6432Node\Symantec\Symantec Endpoint Protection\AV\Exclusions\HeuristicScanning\Filename\Admin'
+        $Results = ForEach ($entry in $Symantec) {
             Set-Location $entry.PSPath
             $var = Get-ItemProperty -Path . 
 
@@ -376,9 +377,9 @@ If ($GatherSepExclusions -eq 'Yes') {
             }
 
         }
-        "HeuristicScanning - Filename" | Out-File $logpath -Append
-        $results | Out-File $logpath -Append
-        "$CCMTempDir\logs\symantec-exclusions.log"
+        "HeuristicScanning - Filename" | Out-File $LogPath -Append
+        $Results | Out-File $LogPath -Append
+        "$CCMTempDir\logs\Symantec-exclusions.log"
     }
 }
 
