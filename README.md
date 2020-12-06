@@ -3,6 +3,8 @@ A script developed by Microsoft Customer Engineers Russ Rimmerman and David Ande
 ## Features
 CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (SCCM). The purpose of using CollectAllLogs is to quickly and easily collect a very extensive list of logs, registry setting exports, and other diagnostic data from a device or collection of devices.  Upon collection, the client will compress the payload and upload them using BITS to the client's assigned Management Point. Finally, a status message will be sent causing the parent site server to copy the compressed logs from the Management Point to a configurable location of choice.
 
+>Note: This script has not yet been tested thoroughly in a hierarchy (with a CAS).  If you have a CAS you will need to edit line 73 of MoveLogToPrimary.ps1 to reflect where you want your logs stored. Please provide feedback if you test the solution in a hierarchy.
+
 The logs, registry settings, and diagnostic data which can currently be collected are as follows:
 
 | MECM | Windows Update | Base OS |        MDM       |    O365   |3rd Party|
