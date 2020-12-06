@@ -12,12 +12,12 @@ The logs which are currently collectable by this solution are as follows:
 |             |WUA GPO Settings|PNP Drivers|MDM Eventlogs | | | |
 |             |CBS.LOG         |PNP Devices|Device Provisioning | | |
 |             |WUA Version Info|System Eventlog|   Device Enrollment | | |
-|             |                |Application Eventlog|Intune Management Extension Logs| | |
+|             |Edge Updates |Application Eventlog|Intune Management Extension Logs| | |
 |             |                |Language Packs| | | |
 |             |                |Delivery Optimization||||
 |             |                |Windows Servicing (Feature Upgrades)| | | |
 |             |                |   DISM.LOG   | | | |
-|             |  Edge Updates  |WaaS | | | |
+|             |                |WaaS | | | |
 |             |                |Registry.POL corruption* | | | |
 |             |                |Windows Defender Logs | | | |
 |             |                |Windows Defender Diagnostic Data | | | |
