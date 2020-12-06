@@ -30,6 +30,7 @@ The logs which are currently collectable by this solution are as follows:
   - Delivery Optimization
   - Windows as a Service
   - Windows Setup
+Additionally, REGISTRY.POL is checked for corruption.  Corruption of this file is known to cause GPOs and Software Updates to fail indefinitely until resolved.
 
 1. Copy Microsoft.ConfigurationManagement.Messaging.dll to <ConfigMgr Installation Dir>\CCM\Incoming\MessagingDll and \SMS_CCM\Temp on each Management Point
 2. Create a new “Run Script” using the contents of the script “CollectAllLogs.ps1” and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. **THIS STEP IS A BUSINESS DECISION**. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.

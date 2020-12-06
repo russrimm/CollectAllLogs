@@ -217,20 +217,31 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
         Get-WindowsUpdateLog -LogPath $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log | Out-Null
         Remove-Item alias:Out-Default -Force -EA SilentlyContinue | Out-Null #Clean out hack to workaround out-default issue with Get-WindowsUpdate
         
-        Invoke-Expression "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wu.txt"
-        Invoke-Expression "reg.exe export HKLM\SOFTWARE\Microsoft\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wuhandlers.txt"
-        Invoke-Expression "reg.exe export HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wupolicy.txt"
-        Invoke-Expression "reg.exe export HKLM\Software\Microsoft\PolicyManager\current\device\Update $CCMTempDir\logs\WindowsUpdate\registry_wupolicy_mdm.txt"
-        Invoke-Expression "reg.exe export HKLM\Software\Microsoft\WindowsUpdate\UX\Settings $CCMTempDir\logs\WindowsUpdate\registry_wupolicy_UX.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wu.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wuhandlers.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wupolicy.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\PolicyManager\current\device\Update $CCMTempDir\logs\WindowsUpdate\registry_wupolicy_mdm.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\WindowsUpdate\UX\Settings $CCMTempDir\logs\WindowsUpdate\registry_wupolicy_UX.txt"
 
         
+        Function Test-IsRegistryPOLGood {
+            [cmdletbinding()]
+            Param
+            (
+                [Parameter(Mandatory = $false)]
+                [string[]]$PathToRegistryPOLFile = $(Join-Path $env:windir 'System32\GroupPolicy\Machine\Registry.pol')
+            )
+ 
+            if (!(Test-Path -Path $PathToRegistryPOLFile -PathType Leaf)) { return $null }
+ 
+            [Byte[]]$FileHeader = Get-Content -Encoding Byte -Path $PathToRegistryPOLFile -TotalCount 4
+ 
+            if (($FileHeader -join '') -eq '8082101103') { return 'Compliant' } else { return 'Not-Compliant' }
+        }
+        Test-IsRegistryPOLGood
 
-        #       Start-Bitstransfer https://logviz.blob.core.windows.net/tools/copylogs.exe -Destination $env:temp
-        #       Start-Process $env:temp\copylogs.exe -NoNewWindow
-        #       Start-Sleep -Seconds 115
-        #       Stop-Process -Name copylogs
-        #       $WindowsUpgradeZip = get-childitem $env:temp -Filter *.zip -recurse | Where-Object { $_.CreationTime -gt (Get-Date).AddMinutes(-2) } 
-        #       Move-Item -Path $WindowsUpgradeZip.FullName -Destination $CCMTempDir\logs\WindowsUpdate | Out-Null
+        If (Test-IsRegistryPOLGood -eq 'Compliant' ) {"Registry.POL is NOT corrupted." | Out-File $CCMTempDir\logs\SystemInfo\REGISTRYPOL.GOOD.TXT}
+        Else {"Registry.POL IS CORRUPT. It is recommended to delete it and verify it is excluded in antivirus exclusions." | Out-File $\CCMTempDir\logs\SystemInfo\REGISTRY.POL.CORRUPTED.TXT}
     }
 
     Else {
