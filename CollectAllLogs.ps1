@@ -231,11 +231,12 @@ If ($GatherSystemInfo -eq 'Yes') {
 
 }
 
-#Gather SCCM Client Logs
+#Gather SCCM Client Info
 If ($GatherBaseSCCMLogs -eq 'Yes') {
     Copy-Item -Path $CCMLogdirectory -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
     Copy-Item -Path $env:windir\ccmsetup\*.log -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
     Copy-Item $env:windir\ccmsetup\MobileClient*.tcf $CCMTempDir\logs\CCM | Out-Null
+    Copy-Item $env:windir\CCM\CCMStore.sdf $CCMTempDir\logs\CCM | Out-Null
 
     #Get SMS Reigstry Key if SCCM client logs are being gathered
     If ($GatherBaseSCCMLogs -eq 'Yes') {
@@ -260,6 +261,41 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
         Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\PolicyManager\current\device\Update $CCMTempDir\logs\WindowsUpdate\registry_wupolicy_mdm.txt"
         Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\WindowsUpdate\UX\Settings $CCMTempDir\logs\WindowsUpdate\registry_wupolicy_UX.txt"
 
+        # Get software update(s) history
+        try {
+  
+            $Session = New-Object -ComObject "Microsoft.Update.Session"
+            $Searcher = $Session.CreateUpdateSearcher()
+            $historyCount = $Searcher.GetTotalHistoryCount()
+            $UpdateHistory = $Searcher.QueryHistory(0, $historyCount) | Select-Object ClientApplicationID, Date, Title,
+            @{name = "Operation"; expression = { Switch ($_.operation) {
+                        1 { "Installation" }; 2 { "Uninstallation" }; 3 { "Other" }
+                    } }
+            },
+
+            @{name = "Status"; expression = { Switch ($_.Resultcode) {
+
+                        1 { "In Progress" }; 2 { "Succeeded" }; 3 { "Succeeded With Errors" };
+
+                        4 { "Failed" }; 5 { "Aborted" }
+                    } }
+            } | Where-Object ClientApplicationID -ne $null
+
+            $UpdateHistory | Export-Clixml $CCMTempDir\logs\WindowsUpdate\UpdateHistory.xml
+        }
+        catch {  }
+
+        # Retrieve update sources
+        try {
+            $SUS = New-Object -ComObject "Microsoft.Update.ServiceManager"
+            $defaultAUService = $SUS.Services | Where-Object { $_.IsDefaultAUService -eq $true } | Select-Object Name -ExpandProperty Name
+            if ($defaultAUService -ne "Windows Server Update Service")
+            { "WSUS is NOT the default update source! Review ...\WindowsUpdate\WindowsUpdateSources.txt" | Out-File "$CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt" }
+            else {  }
+        
+            $SUS.Services | Out-File $CCMTempDir\WindowsUpdate\WindowsUpdateSources.txt -Force
+        }
+        catch { "Failed to retrieve update sources! $($_.Exception.Message)" | Out-File "$CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt" }
         
         Function Test-IsRegistryPOLGood {
             [cmdletbinding()]
