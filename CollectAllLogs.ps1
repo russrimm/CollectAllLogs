@@ -313,10 +313,10 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
  
             if (($FileHeader -Join '') -eq '8082101103') { Return 'Compliant' } Else { Return 'Not-Compliant' }
         }
-        Test-IsRegistryPOLGood
+        $ComplianceChk = Test-IsRegistryPOLGood
 
-        If (Test-IsRegistryPOLGood -eq 'Compliant' ) {"Registry.POL is NOT corrupted." | Out-File $CCMTempDir\logs\SystemInfo\REGISTRYPOL.GOOD.TXT}
-        Else {"Registry.POL IS CORRUPT. It is recommended to delete it and verify it is excluded in antivirus exclusions." | Out-File $CCMTempDir\logs\SystemInfo\REGISTRY.POL.CORRUPTED.TXT}
+        If ($ComplianceChk -eq 'Compliant' ) {"Registry.POL is NOT corrupted." | Out-File "$CCMTempDir\logs\SystemInfo\REGISTRYPOL.GOOD.TXT"}
+        Else {"Registry.POL IS CORRUPT. It is recommended to delete it and verify it is excluded in antivirus exclusions." | Out-File "$CCMTempDir\logs\SystemInfo\REGISTRY.POL.CORRUPTED.TXT"}
     }
 
     Else {
