@@ -41,7 +41,7 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 
 6. On the Actions Tab, check the **Run a program** box
 7. Enter the following command line:
-   "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -ExecutionPolicy Bypass -File "\<*ScriptsDir*\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder \<CollectAllLogsDir\>
+   **C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -ExecutionPolicy Bypass -File "\<*ScriptsDir*\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder \<CollectAllLogsDir\>**
 
    ![Image-2](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img3.png "Image-2")
 
