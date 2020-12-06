@@ -8,7 +8,7 @@ The logs which are currently collectable by this solution are as follows:
 
 | MECM Client | Windows Update | Base OS |        MDM       |    O365   |3rd Party|
 |:-------------:|:----------------:|:-------------:|:------------------:|:-----------:|:---------:|
-|MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool- areas:provisioning, enrollment, autopilot|OneDrive Logs|Symantec Antivirus Exclusions|
+|MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool \(provisioning, enrollment, autopilot\)|OneDrive Logs|Symantec Antivirus Exclusions|
 |             |WUA GPO Settings|PNP Drivers|MDM Eventlogs | | | |
 |             |CBS.LOG         |PNP Devices|Device Provisioning | | |
 |             |WUA Version Info|System Eventlog|   Device Enrollment | | |
