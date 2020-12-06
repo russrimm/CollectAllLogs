@@ -5,9 +5,11 @@ a management point, and send a status message of **1234** which in turn will cau
 
 The logs which are currently collectable by this solution are as follows:
 
-| SCCM Client | Windows Update | Base OS | MDM | 3rd Party
-|-------------|----------------|---------|-----|------------
-|             |WindowsUpdate   |
+| SCCM Client | Windows Update | Base OS | MDM | 3rd Party |
+|-------------|----------------|---------|-----|-----------|
+|             |WindowsUpdate   |CBS | MDMDiagnosticsTool | Symantec Antivirus Exclusions |
+| |GPO Settings |PNP Drivers | Autopilot | |
+
 - Windows Defender Logs and Diagnostic Data Logs.  See [-GetFiles](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data) for more details.
 - Edge Updates
 - Windows Servicing (from in-place upgrades)
