@@ -217,6 +217,7 @@ If ($GatherSystemInfo -eq 'Yes') {
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WaaSAssessment $CCMTempDir\logs\SystemInfo\registry_waasassessment.txt"  
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\WindowsSelfhost $CCMTempDir\logs\SystemInfo\registry_windowsselfhost.txt"  
     Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\SQMClient $CCMTempDir\logs\SystemInfo\registry_sqmmachineid.txt"  
+    If ($GatherBaseSCCMLogs -eq 'Yes') {Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\SMS $CCMTempDir\logs\SystemInfo\registry_SMS.txt"}
 }
 
 #Gather SCCM Client Logs
@@ -228,7 +229,7 @@ If ($GatherBaseSCCMLogs -eq 'Yes') {
 #Gather WindowsUpdate Logs
 If ($GatherWindowsUpdateLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\WindowsUpdate | Out-Null
-    $OSversion = (Get-WmiObject -Namespace Root\Cimv2 -Class Win32_OperatingSystem).Version
+    $OSversion = (Get-WmiObject -Namespace Root\CimV2 -Class Win32_OperatingSystem).Version
     If ($OSversion -like "10.*") {
         If ( -not ( Test-Path alias:out-default ) ) { New-Alias Out-Default Write-Verbose -Scope Global } #Hack get-windowsUpdate writing to Out-Default instead of best practive of Write-host,etc
         Get-WindowsUpdateLog -LogPath $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log | Out-Null
@@ -249,16 +250,16 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
                 [string[]]$PathToRegistryPOLFile = $(Join-Path $env:windir 'System32\GroupPolicy\Machine\Registry.pol')
             )
  
-            if (!(Test-Path -Path $PathToRegistryPOLFile -PathType Leaf)) { return $null }
+            If (!(Test-Path -Path $PathToRegistryPOLFile -PathType Leaf)) { Return $null }
  
             [Byte[]]$FileHeader = Get-Content -Encoding Byte -Path $PathToRegistryPOLFile -TotalCount 4
  
-            if (($FileHeader -join '') -eq '8082101103') { return 'Compliant' } else { return 'Not-Compliant' }
+            if (($FileHeader -Join '') -eq '8082101103') { Return 'Compliant' } Else { Return 'Not-Compliant' }
         }
         Test-IsRegistryPOLGood
 
         If (Test-IsRegistryPOLGood -eq 'Compliant' ) {"Registry.POL is NOT corrupted." | Out-File $CCMTempDir\logs\SystemInfo\REGISTRYPOL.GOOD.TXT}
-        Else {"Registry.POL IS CORRUPT. It is recommended to delete it and verify it is excluded in antivirus exclusions." | Out-File $\CCMTempDir\logs\SystemInfo\REGISTRY.POL.CORRUPTED.TXT}
+        Else {"Registry.POL IS CORRUPT. It is recommended to delete it and verify it is excluded in antivirus exclusions." | Out-File $CCMTempDir\logs\SystemInfo\REGISTRY.POL.CORRUPTED.TXT}
     }
 
     Else {
