@@ -40,7 +40,7 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
    ![Image-1](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img1.png "Image-1")
 
 6. On the Actions Tab, check the **Run a program** box
-7. Enter the following command line into the Program blank:
+7. Enter the following command line into the **Program** blank and click **Ok**
 
   > **C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File "\<***ScriptsDir***\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder ***\<CollectAllLogsDir\>*****
 
