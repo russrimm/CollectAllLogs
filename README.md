@@ -7,7 +7,7 @@ CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (
 
 The logs, registry settings, and diagnostic data which can currently be collected are as follows:
 
-| MECM | Windows Update | Base OS |        MDM       |    O365   |3rd Party|
+| MECM | Windows Update | Base OS |        MDM       |    Office365   |3rd Party|
 |:-------------:|:----------------:|:-------------:|:------------------:|:-----------:|:---------:|
 |MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool \(provisioning, enrollment, autopilot\)|OneDrive Logs|Symantec Antivirus Exclusions|
 |             |Windows Update GPO Settings|PNP Drivers|MDM Eventlogs | | | |
