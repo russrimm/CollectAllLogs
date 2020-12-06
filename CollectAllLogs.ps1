@@ -345,6 +345,7 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
     Invoke-Expression -Command "pnputil /enum-devices >$CCMTempDir\logs\pnpdevices.log"
 
     #Download SetupDiag
+    #If this link ever breaks, you can get the updated link from https://go.microsoft.com/fwlink/?linkid=870142 which is the current SetupDiag download link.
     Start-BitsTransfer https://download.microsoft.com/download/d/8/1/d8149356-6590-4bec-b1bd-a2adcf84ace9/SetupDiag.exe -Destination $env:TEMP
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\SetupDiag | Out-Null
     Invoke-Expression "$env:temp\SetupDiag.exe /Output:$CCMTempDir\logs\SetupDiag /Ziplogs:False"
