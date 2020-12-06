@@ -269,9 +269,9 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
 #Gather Windows Defender Logs
 If ($GatherDefenderLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Defender | Out-Null
-    Start-Process -FilePath $env:ProgramFiles\Windows Defender\mpcmdrun.exe -GetFiles
-    Copy-Item -Path '$env:ProgramData\Microsoft\Windows Defender\Support\*.log' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
-    Copy-Item -Path '$env:ProgramData\Microsoft\Windows Defender\Support\MPSupportFiles.cab' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
+    Start-Process -FilePath "$env:ProgramFiles\Windows Defender\mpcmdrun.exe" -ArgumentList "-GetFiles"
+    Copy-Item -Path "$env:ProgramData\Microsoft\Windows Defender\Support\*.log" -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
+    Copy-Item -Path "$env:ProgramData\Microsoft\Windows Defender\Support\MPSupportFiles.cab" -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
 
 }
 
