@@ -10,7 +10,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 | MECM | Windows Update | Base OS |        MDM       |    Office365   |3rd Party|
 |:-------------:|:----------------:|:-------------:|:------------------:|:-----------:|:---------:|
 |MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool \(provisioning, enrollment, autopilot\)|OneDrive Logs|Symantec Antivirus Exclusions|
-|CCM/SMS RegKeys|Windows Update GPO Settings|PNP Drivers|MDM Eventlogs | | | |
+|MECM Client Registry Keys|Windows Update GPO Settings|PNP Drivers|MDM Eventlogs | | | |
 |MobileClient.TCF|CBS.LOG         |PNP Devices|Device Provisioning | | |
 |CCMStore.SDF |Windows Update Agent Version Info|System/App/Setup Eventlogs|   Device Enrollment | | |
 |             |Edge Updates |Processes & Services|Intune Management Extension Logs| | |
