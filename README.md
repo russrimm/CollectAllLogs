@@ -14,7 +14,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             |CBS.LOG         |PNP Devices|Device Provisioning | | |
 |             |Windows Update Agent Version Info|System Eventlog|   Device Enrollment | | |
 |             |Edge Updates |Application Eventlog|Intune Management Extension Logs| | |
-|             |                |Language Packs| | | |
+|             |SetupDiag Logs  |Language Packs| | | |
 |             |                |Delivery Optimization||||
 |             |                |Windows Servicing (Feature Upgrades)| | | |
 |             |                |   DISM.LOG   | | | |
