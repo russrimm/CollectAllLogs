@@ -353,7 +353,6 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
     #Gather log Files from C:\~BT
     If (Test-Path C:\~BT) {
         Copy-Item -Path C:\~BT -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
-
     }
 
 
