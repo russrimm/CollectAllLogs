@@ -10,10 +10,10 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 | MECM | Windows Update | Base OS |        MDM       |    Office365   |3rd Party|
 |:-------------:|:----------------:|:-------------:|:------------------:|:-----------:|:---------:|
 |MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool \(provisioning, enrollment, autopilot\)|OneDrive Logs|Symantec Antivirus Exclusions|
-|CCM/SMS RegKey|Windows Update GPO Settings|PNP Drivers|MDM Eventlogs | | | |
-|CCMSetup.Log |CBS.LOG         |PNP Devices|Device Provisioning | | |
-|CCMStore.SDF |Windows Update Agent Version Info|System Eventlog|   Device Enrollment | | |
-|MobileClient.TCF|Edge Updates |Application Eventlog|Intune Management Extension Logs| | |
+|CCM/SMS RegKeys|Windows Update GPO Settings|PNP Drivers|MDM Eventlogs | | | |
+|MobileClient.TCF|CBS.LOG         |PNP Devices|Device Provisioning | | |
+|CCMStore.SDF |Windows Update Agent Version Info|System/App/Setup Eventlogs|   Device Enrollment | | |
+|             |Edge Updates |Processes & Services|Intune Management Extension Logs| | |
 |             |SetupDiag Logs  |Language Packs| | | |
 |             |WU Install History|Delivery Optimization||||
 |             |WU Install Sources|Windows Servicing (Feature Upgrades)| | | |
@@ -24,7 +24,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             |                |Windows Defender Diagnostic Data<sup>2</sup>| | | |
 |             |                |Windows Setup Registry | | | | 
 |             |                |Filter Drivers | | | |
-|             |                |Processes & Services | | | |
+|             |                | | | | |
 
 
 <sup>1</sup> ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved. Registry.POL corruption is typically caused by antivirus exclusions not excluding it.***
