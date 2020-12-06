@@ -7,7 +7,7 @@ The logs which are currently collectable by this solution are as follows:
 
 - SCCM Client
 - WindowsUpdate
-- Windows Defender
+- Windows Defender Logs and all output from [-GetFiles](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data)
 - Edge Updates
 - Windows Servicing (from in-place upgrades)
 - DISM (Deployment Image Servicing and Management)
@@ -17,12 +17,19 @@ The logs which are currently collectable by this solution are as follows:
 - PNP Driver Package enumeration
 - PNP Device enumeration
 - Application Eventlog
-- MDMDiagnosticsTool outputs for
+- Admin/Operational Device Management Diagnostics Eventlogs
+- MDMDiagnosticsTool area outputs for
   - Autopilot
   - Device Provisioning
   - Device Enrollment
 - Intune Management Extension
 - Symantec Antivirus Exclusions
+- Registry exports from
+  - Windows Updates
+  - Language Packs
+  - Delivery Optimization
+  - Windows as a Service
+  - Windows Setup
 
 1. Copy Microsoft.ConfigurationManagement.Messaging.dll to <ConfigMgr Installation Dir>\CCM\Incoming\MessagingDll and \SMS_CCM\Temp on each Management Point
 2. Create a new “Run Script” using the contents of the script “CollectAllLogs.ps1” and approve it.
