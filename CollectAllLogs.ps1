@@ -233,16 +233,18 @@ If ($GatherSystemInfo -eq 'Yes') {
 
 #Gather SCCM Client Info
 If ($GatherBaseSCCMLogs -eq 'Yes') {
-    Copy-Item -Path $CCMLogdirectory -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
-    Copy-Item -Path $env:windir\ccmsetup\*.log -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
-    Copy-Item $env:windir\ccmsetup\MobileClient*.tcf $CCMTempDir\logs\CCM | Out-Null
-    Copy-Item $env:windir\CCM\CCMStore.sdf $CCMTempDir\logs\CCM | Out-Null
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\CCM\Logs | Out-Null
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\CCM\Other | Out-Null
+    Copy-Item -Path $CCMLogdirectory -Destination $CCMTempDir\logs\CCM\Logs -Force -Recurse | Out-Null
+    Copy-Item -Path $env:windir\ccmsetup\logs\*.log -Destination $CCMTempDir\logs\CCM\Logs -Force -Recurse | Out-Null
+    Copy-Item $env:windir\ccmsetup\MobileClient*.tcf $CCMTempDir\logs\CCM\Other -Force | Out-Null
+    Copy-Item $env:windir\CCM\CCMStore.sdf $CCMTempDir\logs\CCM\Other -Force | Out-Null
 
     #Get SMS Reigstry Key if SCCM client logs are being gathered
     If ($GatherBaseSCCMLogs -eq 'Yes') {
-        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\SMS $CCMTempDir\logs\SystemInfo\registry_SMS.txt"
-        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\CCM $CCMTempDir\logs\SystemInfo\registry_CCM.txt"
-        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\CCMSetup $CCMTempDir\logs\SystemInfo\registry_CCMSetup.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\SMS $CCMTempDir\logs\CCM\Other\registry_SMS.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\CCM $CCMTempDir\logs\CCM\Other\registry_CCM.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\CCMSetup $CCMTempDir\logs\CCM\Other\registry_CCMSetup.txt"
     }
 }
 
