@@ -7,18 +7,18 @@ The logs which are currently collectable by this solution are as follows:
 
 - SCCM Client
 - WindowsUpdate
-- Windows Defender Logs and all output from [-GetFiles](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data)
+- Windows Defender Logs and Diagnostic Data Logs (visit) [-GetFiles]](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data)
 - Edge Updates
 - Windows Servicing (from in-place upgrades)
 - DISM (Deployment Image Servicing and Management)
 - CBS (Component Based Servicing)
 - OneDrive
 - System Eventlog
+- Application Eventlog
 - PNP Driver Package enumeration
 - PNP Device enumeration
-- Application Eventlog
-- Admin/Operational Device Management Diagnostics Eventlogs
-- MDMDiagnosticsTool area outputs for
+- Modern Device Management Diagnostics Admin & Operational Eventlogs (AAD/MDM Enrollment)
+- MDMDiagnosticsTool 'area outputs for
   - Autopilot
   - Device Provisioning
   - Device Enrollment
@@ -44,9 +44,9 @@ The logs which are currently collectable by this solution are as follows:
    "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -executionpolicy bypass -file "<ScriptsDir>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder <CollectAllLogsDir>
 7. Move status filter rule up in priority to the top
 8. Right-click a single device or a collection of devices in the MECM console
-9. Click _Run Script_
-10. Select the _Collect All Logs_ script
+9. Click **Run Script**
+10. Select the **Collect All Logs** script
 
     ![Image-2](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img2.png "Image-2")
 
-11. Monitor the path chosen for <CollectAllLogsDir> for a .zip file after a few minutes containing all of the log files, eventlogs, registry exports, and system information which will be named <ComputerNameMM-DD-YYYY>.ZIP.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
+11. Monitor the path chosen for <CollectAllLogsDir> for a .zip file after a few minutes containing all of the log files, eventlogs, registry exports, and system information which will be named <ComputerNameMM-DD-YYYY>.zip.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
