@@ -6,9 +6,9 @@ a management point, and send a status message of **1234** which in turn will cau
 
 The logs which are currently collectable by this solution are as follows:
 
-| SCCM Client | Windows Update | Base OS |    MDM     |O365|  3rd Party  |
-|-------------|----------------|---------|---------------|-----------|-----|
-|             |WindowsUpdate   |  DISM   |MDMDiagnosticsTool (provisioning, enrollment, autopilot)|OneDrive Logs| Symantec Antivirus Exclusions |
+| SCCM Client | Windows Update | Base OS |        MDM       |    O365   |3rd Party|
+|-------------|----------------|---------|------------------|-----------|---------|
+|             |WindowsUpdate   |  DISM   |MDMDiagnosticsTool provisioning, enrollment, autopilot |OneDrive Logs|Symantec Antivirus Exclusions|
 |             |WUA GPO Settings|PNP Drivers|MDM Eventlogs | | | |
 |             |CBS.LOG         |PNP Devices|Device Provisioning | | |
 |             |WUA Version     |System Eventlog|   Device Enrollment | | |
