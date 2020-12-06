@@ -1,7 +1,7 @@
 # CollectAllLogs
 A script developed by Microsoft Customer Engineers Russ Rimmerman and David Anderson.
 ## Features
-CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (SCCM). The purpose of using CollectAllLogs is to quickly and easily collect a very extensive list of logs, registry setting exports, and other diagnostic data from a device or collection of devices.  Upon collection, the client will compress the payload and upload them to the client's assigned Management Point.  Finally, it will send a status message causing the parent site server to copy the compressed logs from the Management Point to a configurable location of choice.
+CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (SCCM). The purpose of using CollectAllLogs is to quickly and easily collect a very extensive list of logs, registry setting exports, and other diagnostic data from a device or collection of devices.  Upon collection, the client will compress the payload and upload them using BITS to the client's assigned Management Point. Finally, a status message will be sent causing the parent site server to copy the compressed logs from the Management Point to a configurable location of choice.
 
 The logs, registry settings, and diagnostic data which can currently be collected are as follows:
 
@@ -55,3 +55,4 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 
 12. Monitor the path used for \<***CollectAllLogsDir***\> for a .zip file after a few minutes containing all of the log files, eventlogs, registry exports, and system information which will be named \<***ComputerNameMM-DD-YYYYHHMMS\>.zip***.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
 
+If you have any additional ideas for logs or other diagnostics to collect, please feel free to contribute to this wonderful utility.

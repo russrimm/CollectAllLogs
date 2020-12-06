@@ -5,7 +5,7 @@
 Param(
     [Parameter(Mandatory = $True)][string] $InsString1,
     [Parameter(Mandatory = $True)][string] $InsString2,
-    [Parameter(Mandatory = $True)][string] $PrimaryLogFolder
+    [Parameter(Mandatory = $True)][string] $ParentLogFolder
 )
 $CMGConnected = $false
 
@@ -65,12 +65,12 @@ $CCMIncoming = "\\$InsString1\$CCMIncoming"
 
 $CASServerName = DetermineSiteHiearchy
 
-if ($CASServerName -eq $null) {
-    move-Item "$CCMIncoming\$InsString2" $PrimaryLogFolder -Force
+If ($null -eq $CASServerName) {
+    Move-Item "$CCMIncoming\$InsString2" $ParentLogFolder -Force
 }
 
-else {
-    $CASServerLogFolder = "\\cas\d$\GatheredClientLogs"
+Else {
+    $CASServerLogFolder = "\\$CASServerName\d$\$ParentLogFolder"
     move-Item "$CCMIncoming\$InsString2" $CASServerLogFolder -Force
 }
 
