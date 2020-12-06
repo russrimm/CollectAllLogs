@@ -7,40 +7,27 @@ a management point, and send a status message of **1234** which in turn will cau
 The logs which are currently collectable by this solution are as follows:
 
 | SCCM Client | Windows Update | Base OS |        MDM       |    O365   |3rd Party|
-|-------------|----------------|---------|------------------|-----------|---------|
-|             |WindowsUpdate   |  DISM   |MDMDiagnosticsTool provisioning, enrollment, autopilot |OneDrive Logs|Symantec Antivirus Exclusions|
+|-------------|----------------|-------------|------------------|-----------|---------|
+|             |Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool- areas:provisioning, enrollment, autopilot|OneDrive Logs|Symantec Antivirus Exclusions|
 |             |WUA GPO Settings|PNP Drivers|MDM Eventlogs | | | |
 |             |CBS.LOG         |PNP Devices|Device Provisioning | | |
-|             |WUA Version     |System Eventlog|   Device Enrollment | | |
+|             |WUA Version Info|System Eventlog|   Device Enrollment | | |
 |             |                |Application Eventlog|Intune Management Extension Logs| | |
 |             |                |Language Packs| | | |
-|             | |||||
+|             |                |Delivery Optimization||||
+|             |                |Windows Servicing (Feature Upgrades)| | | |
+|             |                |   DISM.LOG   | | | |
+|             |  Edge Updates  |WaaS | | | |
+|             |                |Registry.POL corruption* | | | |
+|             |                |Windows Defender Logs | | | |
+|             |                |Windows Defender Diagnostic Data | | | |
+|             |                |Windows Setup Registry | | | | 
 
 
 - Windows Defender Logs and Diagnostic Data Logs.  See [-GetFiles](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data) for more details.
-- Edge Updates
-- Windows Servicing (from in-place upgrades)
-- DISM (Deployment Image Servicing and Management)
-- CBS (Component Based Servicing)
-- OneDrive
-- System Eventlog
-- Application Eventlog
-- PNP Driver Package enumeration
-- PNP Device enumeration
-- Modern Device Management Diagnostics Admin & Operational Eventlogs (AAD/MDM Enrollment)
-- MDMDiagnosticsTool "area" outputs for
-  - Autopilot
-  - Device Provisioning
-  - Device Enrollment
-- Intune Management Extension
-- Symantec Antivirus Exclusions
-- Registry exports from
-  - Windows Updates
-  - Language Packs
-  - Delivery Optimization
-  - Windows as a Service
-  - Windows Setup
-  - Additionally, REGISTRY.POL is checked for corruption.  ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved.***
+
+
+* ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved.***
 
 CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the brilliant MECM Guru David Anderson, Customer Engineer (he's really a PFE).  His wizardy and mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
 
