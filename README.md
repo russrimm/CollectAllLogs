@@ -54,5 +54,5 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 
     ![Image-3](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img2.png "Image-3")
 
-12. Monitor the path used for \<***CollectAllLogsDir***\> for a .zip file after a few minutes containing all of the log files, eventlogs, registry exports, and system information which will be named \<***ComputerNameMM-DD-YYYYHHMMSS***\>.zip.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
+12. Monitor the path used for \<***CollectAllLogsDir***\> for a .zip file after a few minutes containing all of the log files, eventlogs, registry exports, and system information which will be named \<***ComputerNameMM-DD-YYYYHHMMS\>.zip***.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
 
