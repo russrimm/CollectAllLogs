@@ -216,14 +216,33 @@ If ($GatherSystemInfo -eq 'Yes') {
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Superfetch $CCMTempDir\logs\SystemInfo\registry_superfetch.txt"  
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WaaSAssessment $CCMTempDir\logs\SystemInfo\registry_waasassessment.txt"  
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\WindowsSelfhost $CCMTempDir\logs\SystemInfo\registry_windowsselfhost.txt"  
-    Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\SQMClient $CCMTempDir\logs\SystemInfo\registry_sqmmachineid.txt"  
-    If ($GatherBaseSCCMLogs -eq 'Yes') {Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\SMS $CCMTempDir\logs\SystemInfo\registry_SMS.txt"}
+    Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\SQMClient $CCMTempDir\logs\SystemInfo\registry_sqmmachineid.txt"
+    #Get Filter Drivers
+    Invoke-Expression -Command "fltmc filters > $CCMTempDir\logs\SystemInfo\FilterDrivers.txt"
+    #Get Services
+    $svc = Get-Service | Sort-Object Status, Name
+    $svc | Select-Object Status, StartType, Name, DisplayName | Out-File $CCMTempDir\logs\SystemInfo\Services.txt -Force # Services
+    $svc | Format-List * | Out-File $CCMTempDir\logs\SystemInfo\Services.txt -Append # Services 
+    
+    #Get Processes
+    $proc = Get-Process | Sort-Object ProcessName
+    $proc | Select-Object ProcessName, StartTime, Description, Path | Out-File $CCMTempDir\logs\SystemInfo\Processes.txt -Force # Processes
+    $proc | Format-List * | Out-File $CCMTempDir\logs\Systeminfo\Processes.txt -Append
+
 }
 
 #Gather SCCM Client Logs
 If ($GatherBaseSCCMLogs -eq 'Yes') {
     Copy-Item -Path $CCMLogdirectory -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
     Copy-Item -Path $env:windir\ccmsetup\*.log -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
+    Copy-Item $env:windir\ccmsetup\MobileClient*.tcf $CCMTempDir\logs\CCM | Out-Null
+
+    #Get SMS Reigstry Key if SCCM client logs are being gathered
+    If ($GatherBaseSCCMLogs -eq 'Yes') {
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\SMS $CCMTempDir\logs\SystemInfo\registry_SMS.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\CCM $CCMTempDir\logs\SystemInfo\registry_CCM.txt"
+        Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\CCMSetup $CCMTempDir\logs\SystemInfo\registry_CCMSetup.txt"
+    }
 }
 
 #Gather WindowsUpdate Logs
@@ -316,6 +335,28 @@ If ($DumpSystemEventLog -eq 'Yes') {
 If ($DumpSystemAppLog -eq 'Yes') {
     # Config
     $logFileName = "Application" # Add Name of the Logfile (System, Application, etc)
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\EventLogs | Out-Null
+    $path = "$CCMTempDir\logs\EventLogs\" # Add Path, needs to end with a backsplash
+
+    # do not edit
+    $exportFileName = $logFileName + (Get-Date -f yyyyMMdd) + ".evt"
+    $logFile = Get-WmiObject Win32_NTEventlogFile | Where-Object { $_.logfilename -eq $logFileName }
+    $logFile.backupeventlog($path + $exportFileName) | Out-Null
+
+    # Deletes all .evt logfiles in $Path
+    # Be careful, this script removes all files with the extension .evt not just the selfcreated logfiles
+    $Daysback = "-7"
+
+    $CurrentDate = Get-Date
+    $DatetoDelete = $CurrentDate.AddDays($Daysback)
+    Get-ChildItem $Path | Where-Object { ($_.LastWriteTime -lt $DatetoDelete) -and ($_.Extension -eq ".evt") } | Remove-Item
+    #Clear-Eventlog -LogName $logFileName
+}
+
+#Gather Setup EventLogs
+If ($DumpSystemAppLog -eq 'Yes') {
+    # Config
+    $logFileName = "Setup" # Add Name of the Logfile (System, Application, etc)
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\EventLogs | Out-Null
     $path = "$CCMTempDir\logs\EventLogs\" # Add Path, needs to end with a backsplash
 

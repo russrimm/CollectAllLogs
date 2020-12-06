@@ -1,7 +1,7 @@
 # CollectAllLogs
 A script developed by Microsoft Customer Engineers Russ Rimmerman and David Anderson.
 ## Features
-CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (SCCM). The purpose of using CollectAllLogs is to quickly and easily collect a very extensive list of logs, registry setting exports, and other diagnostic data from a device or collection of devices.  Upon collection, the client will compress the payload and upload them using BITS to the client's assigned Management Point. Finally, a status message will be sent causing the parent site server to copy the compressed logs from the Management Point to a configurable location of choice.
+CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (SCCM). The purpose of CollectAllLogs is to quickly and easily collect a very extensive list of logs, registry settings, and a variety of other diagnostic data from a device or collection of devices.  Once collected, the client will compress the payload and upload it using BITS to the client's assigned Management Point. Finally, a status message will be sent, triggering the parent site server to copy the compressed ZIP file from the Management Point to a configurable destination directory of choice.
 
 >Note: This script has not yet been tested thoroughly in a hierarchy (with a CAS).  If you have a CAS you will need to edit line 73 of MoveLogToPrimary.ps1 to reflect where you want your logs stored. Please provide feedback if you test the solution in a hierarchy.
 
@@ -23,34 +23,36 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             |                |Windows Defender Logs | | | |
 |             |                |Windows Defender Diagnostic Data<sup>2</sup>| | | |
 |             |                |Windows Setup Registry | | | | 
+|             |                |Filter Drivers | | | |
+|             |                |Processes & Services | | | |
 
 
 <sup>1</sup> ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved. Registry.POL corruption is typically caused by antivirus exclusions not excluding it.***
 
 <sup>2</sup> See [Collect Microsoft Defender AV diagnostic data](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data) for more details.
 
-CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the *brilliant* MECM Guru David Anderson, PFE/CE.  David's mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
+CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the *brilliant and fearless* MECM Guru David Anderson, PFE/CE.  David's mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
 
 ## Installation Instructions
 1. Copy **Microsoft.ConfigurationManagement.Messaging.dll** to \<***ConfigMgr Installation Dir***\>\CCM\Incoming\MessagingDll and \SMS_CCM\Temp on each Management Point
-2. Create a new **Run Script** using the contents of the script **CollectAllLogs.ps1** and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. ***THIS STEP IS A BUSINESS DECISION***. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.
-3. Place the **MoveLogtoPrimary.ps1** script to the primary site server in a directory of choice - let's refer to it as ScriptsDir>.
-4. Create a directory for logs - let's refer to it as \<***CollectAllLogsDir***\>.
-5. Create a status filter rule with Message ID **1234**
+2. Create a new **Run Script** using the contents of the script **CollectAllLogs.ps1** and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. ***CHANGING THIS CONFIGURATION SHOULD BE A BUSINESS DECISION***. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.
+3. Place the **MoveLogtoPrimary.ps1** script to the primary site server in a directory of choice - going forward referred to as \<***ScriptsDir***\>.
+4. Create a directory for logs - going forward referred to as \<***CollectAllLogsDir***\>.
+5. On the **General** tab, create a status filter rule with Message ID **1234**.
 
    ![Image-1](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img1.png "Image-1")
 
-6. On the Actions Tab, check the **Run a program** box
-7. Enter the following command line into the **Program** blank and click **Ok**
+6. On the **Actions** tab, check the **Run a program** box.
+7. Enter the following command line into the **Program** blank and click **Ok**.
 
   > **C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File "\<***ScriptsDir***\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder ***\<CollectAllLogsDir\>*****
 
 
    ![Image-2](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img3.png "Image-2")
 
-8. Move status filter rule up in priority to the top
-9. Right-click a single device or a collection of devices in the MECM console
-10. Click **Run Script**
+8. Move the new status filter rule up in priority somewhere towards the top.
+9. Right-click a single device or a collection of devices in the MECM console.
+10. Click **Run Script**.
 11. Select the **Collect All Logs** script created in step 2 and click **Next** twice.
 
     ![Image-3](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img2.png "Image-3")
