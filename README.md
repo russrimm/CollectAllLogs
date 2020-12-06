@@ -42,7 +42,9 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 6. On the Actions Tab, check the box for “Run a Program”
    Command line:
    "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -ExecutionPolicy Bypass -File "\<*ScriptsDir*\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder \<CollectAllLogsDir\>
+
    ![Image-2](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img3.png "Image-2")
+   
 7. Move status filter rule up in priority to the top
 8. Right-click a single device or a collection of devices in the MECM console
 9. Click **Run Script**
