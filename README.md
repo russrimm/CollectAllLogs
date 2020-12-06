@@ -7,7 +7,7 @@ The logs which are currently collectable by this solution are as follows:
 
 - SCCM Client
 - WindowsUpdate
-- Windows Defender Logs and Diagnostic Data Logs (visit) [-GetFiles]](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data)
+- Windows Defender Logs and Diagnostic Data Logs (visit ![-GetFiles])(https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data)
 - Edge Updates
 - Windows Servicing (from in-place upgrades)
 - DISM (Deployment Image Servicing and Management)
