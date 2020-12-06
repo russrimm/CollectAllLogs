@@ -206,6 +206,7 @@ If ($GatherSystemInfo -eq 'Yes') {
 #Gather SCCM Client Logs
 If ($GatherBaseSCCMLogs -eq 'Yes') {
     Copy-Item -Path $CCMLogdirectory -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
+    Copy-Item -Path $env:windir\ccmsetup\*.log -Destination $CCMTempDir\logs\CCM -Force -Recurse | Out-Null
 }
 
 #Gather WindowsUpdate Logs
