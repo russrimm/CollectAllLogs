@@ -39,18 +39,18 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 
    ![Image-1](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img1.png "Image-1")
 
-6. On the Actions Tab, check the box for “Run a Program”
-   Command line:
+6. On the Actions Tab, check the **Run a program** box
+7. Enter the following command line:
    "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -ExecutionPolicy Bypass -File "\<*ScriptsDir*\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder \<CollectAllLogsDir\>
 
    ![Image-2](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img3.png "Image-2")
-   
-7. Move status filter rule up in priority to the top
-8. Right-click a single device or a collection of devices in the MECM console
-9. Click **Run Script**
-10. Select the **Collect All Logs** script created in step 2
+
+8. Move status filter rule up in priority to the top
+9. Right-click a single device or a collection of devices in the MECM console
+10. Click **Run Script**
+11. Select the **Collect All Logs** script created in step 2
 
     ![Image-3](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img2.png "Image-3")
 
-11. Monitor the path chosen for \<***CollectAllLogsDir***\> for a .zip file after a few minutes containing all of the log files, eventlogs, registry exports, and system information which will be named \<***ComputerNameMM-DD-YYYYHHMMSS***\>.zip.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
+12. Monitor the path used for \<***CollectAllLogsDir***\> for a .zip file after a few minutes containing all of the log files, eventlogs, registry exports, and system information which will be named \<***ComputerNameMM-DD-YYYYHHMMSS***\>.zip.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
 
