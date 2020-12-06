@@ -47,8 +47,8 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 
 8. Move status filter rule up in priority to the top
 9. Right-click a single device or a collection of devices in the MECM console
-10. Click **Run Script**
-11. Select the **Collect All Logs** script created in step 2
+10. Click **Run Script** and click **Next**
+11. Select the **Collect All Logs** script created in step 2 and click **Next**
 
     ![Image-3](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img2.png "Image-3")
 
