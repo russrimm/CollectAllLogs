@@ -1,5 +1,5 @@
 # CollectAllLogs
-A script developed by Microsoft Customer Engineers Russ Rimmerman and David Anderson
+A script developed by Microsoft Customer Engineers Russ Rimmerman and David Anderson.
 ## Features
 CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (SCCM). The purpose of using CollectAllLogs is to quickly and easily collect a very extensive list of logs, registry setting exports, and other diagnostic data from a device or collection of devices.  Upon collection, the client will compress the payload and upload them to the client's assigned Management Point.  Finally, it will send a status message causing the parent site server to copy the compressed logs from the Management Point to a configurable location of choice.
 
@@ -8,9 +8,9 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 | MECM | Windows Update | Base OS |        MDM       |    O365   |3rd Party|
 |:-------------:|:----------------:|:-------------:|:------------------:|:-----------:|:---------:|
 |MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool \(provisioning, enrollment, autopilot\)|OneDrive Logs|Symantec Antivirus Exclusions|
-|             |WUA GPO Settings|PNP Drivers|MDM Eventlogs | | | |
+|             |Windows Update GPO Settings|PNP Drivers|MDM Eventlogs | | | |
 |             |CBS.LOG         |PNP Devices|Device Provisioning | | |
-|             |WUA Version Info|System Eventlog|   Device Enrollment | | |
+|             |Windows Update Agent Version Info|System Eventlog|   Device Enrollment | | |
 |             |Edge Updates |Application Eventlog|Intune Management Extension Logs| | |
 |             |                |Language Packs| | | |
 |             |                |Delivery Optimization||||

@@ -1,16 +1,32 @@
 <#
-param(
-[Parameter(Mandatory=$True)][string] $GatherBaseSCCMLogs,
-[Parameter(Mandatory=$True)][string] $GatherWindowsUpdateLogs,
-[Parameter(Mandatory=$True)][string] $GatherLogsRelatedToWindowsServicing,
-[Parameter(Mandatory=$False)][string] $SendStatusMessage,
-[Parameter(Mandatory=$True)][string] $DumpSystemEventLog,
-[Parameter(Mandatory=$True)][string] $DumpSystemAppLog,
-[Parameter(Mandatory=$True)][string] $GatherSEPExclusions,
-[Parameter(Mandatory=$True)][string] $GatherMDMDiagnostics
-)
-#>
+.SYNOPSIS
+    Automatically collect various logs, registry settings, and diagnostic data from client machines.
+    
+.DESCRIPTION
+    A complete script that collects key troubleshooting data from endpoints.
+     
+.EXAMPLES
+    .\SCCM-ClientHealthMonitor.ps1 -TestProvMode -TestGPOFiles (this will run the test and remediation for both options and log to file locally)
 
+    .\SCCM-ClientHealthMonitor.ps1 -TestProvMode -TestGPOFiles -SendEmail (this will run the test and remediation for both options and log to file locally and send an email with the log attached)
+
+    .\SCCM-ClientHealthMonitor.ps1 -TestSCCMClient -TestBITS -TestProvMode -TestGPOFiles -InstallSCCMClient -EmailStatus -TeamsStatus
+
+.NOTES
+    Filename: CollectAllLogs.ps1
+    Version: 1.0
+    Author: Russ Rimmerman, David Anderson
+
+    Version history:
+    1.0 - Script created
+
+.LINKS
+    The Readme can be located: https://github.com/russrimm/CollectAllLogs/blob/1.0/README.md
+
+.CREDIT    
+    This script was developed in a collaborative effort by Microsoft Customer Engineers Russ Rimmerman and David Anderson.
+    
+#> 
 
 $GatherSystemInfo = 'Yes'
 $GatherBaseSCCMLogs = 'Yes'
@@ -157,10 +173,10 @@ Function New-ZipFile {
 If ($ClientCommunicationMode -eq 1) {
     #Intranet
     $MP = Get-WmiObject -Class "CCM_Authority" -Namespace "ROOT\ccm" | Where-Object index -eq 1 | Select-Object CurrentManagementPoint -ExpandProperty CurrentManagementPoint
-    If ($MP -eq $null) {
+    If ($null -eq $MP) {
         Write-Host "Unable to determine current Management for CCM_Authority"
     }
-    If ($MP -ne $null) {
+    If ($null -ne $MP) {
         $MPCapability = Get-WmiObject -Class "SMS_ActiveMPCandidate"  -Namespace "ROOT\ccm\LocationServices" | Where-Object index -eq 1 | Where-Object MP -eq $MP | Select-Object Capabilities -ExpandProperty Capabilities
         If ($MPCapability.Contains("63")) {
             $HttpMode = "https://"
