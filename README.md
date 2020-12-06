@@ -18,14 +18,14 @@ The logs which are currently collectable by this solution are as follows:
 |             |                |Windows Servicing (Feature Upgrades)| | | |
 |             |                |   DISM.LOG   | | | |
 |             |                |WaaS | | | |
-|             |                |Registry.POL corruption[^1] | | | |
+|             |                |Registry.POL corruption<sup>1</sup> | | | |
 |             |                |Windows Defender Logs | | | |
-|             |                |Windows Defender Diagnostic Data[^2]| | | |
+|             |                |Windows Defender Diagnostic Data<sup>2</sup>| | | |
 |             |                |Windows Setup Registry | | | | 
 
 
-[^1]: ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved.***
-[^2]: See [-GetFiles](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data) for more details.
+<sup>1</sup> ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved.***
+<sup>2</sup> See [-GetFiles](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data) for more details.
 
 CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the *brilliant* MECM Guru David Anderson, Customer Engineer (he's really a PFE).  His wizardy and mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
 
