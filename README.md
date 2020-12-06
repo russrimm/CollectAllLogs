@@ -6,10 +6,14 @@ a management point, and send a status message of **1234** which in turn will cau
 
 The logs which are currently collectable by this solution are as follows:
 
-| SCCM Client | Windows Update | Base OS | MDM | 3rd Party |
-|-------------|----------------|---------|-----|-----------|
-|             |WindowsUpdate   |CBS | MDMDiagnosticsTool | Symantec Antivirus Exclusions |
-| |GPO Settings |PNP Drivers | Autopilot | |
+| SCCM Client | Windows Update | Base OS |    MDM     |   3rd Party  |
+|-------------|----------------|---------|---------------|-----------|
+|             |WindowsUpdate   |  DISM   |MDMDiagnosticsTool| Symantec Antivirus Exclusions |
+|             |WUA GPO Settings|PNP Drivers|MDM Eventlogs | |
+|             |CBS.LOG         |PNP Devices|Device Provisioning | |
+|             |WUA Version     |System Eventlog|   Autopilot | |
+|             |                |Application Eventlog|Intune Management Extension Logs| |
+
 
 - Windows Defender Logs and Diagnostic Data Logs.  See [-GetFiles](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data) for more details.
 - Edge Updates
@@ -36,7 +40,7 @@ The logs which are currently collectable by this solution are as follows:
   - Windows Setup
   - Additionally, REGISTRY.POL is checked for corruption.  ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved.***
 
-CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the brilliant MECM Guru David Anderson, Customer Engineer (he's really a PFE).  His wizardy and mastery of Powershell scripting facilitated the complete plumbing and foundation of this utility.
+CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the brilliant MECM Guru David Anderson, Customer Engineer (he's really a PFE).  His wizardy and mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
 
 ## Installation Instructions
 1. Copy **Microsoft.ConfigurationManagement.Messaging.dll** to `ConfigMgr Installation Dir`\CCM\Incoming\MessagingDll and \SMS_CCM\Temp on each Management Point
