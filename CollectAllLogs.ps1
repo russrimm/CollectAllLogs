@@ -193,6 +193,14 @@ If (Test-Path -Path $LogsZip) {
 If ($GatherSystemInfo -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\SystemInfo | Out-Null
     Invoke-Expression -Command "$env:windir\System32\systeminfo.exe >$CCMTempDir\logs\SystemInfo\SystemInfo.log"
+    Invoke-Expression -Command "reg.exe export HKLM\SYSTEM\Setup $CCMTempDir\logs\SystemInfo\registry_setup.txt"
+    Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization $CCMTempDir\logs\SystemInfo\registry_DO.txt"
+    Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion $CCMTempDir\logs\SystemInfo\registry_buildinfo.txt"
+    Invoke-Expression -Command "reg.exe export HKLM\SYSTEM\CurrentControlSet\Control\MUI\UILanguages $CCMTempDir\logs\SystemInfo\registry_langpack.txt"    
+    Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Superfetch $CCMTempDir\logs\SystemInfo\registry_superfetch.txt"  
+    Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WaaSAssessment $CCMTempDir\logs\SystemInfo\registry_waasassessment.txt"  
+    Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\WindowsSelfhost $CCMTempDir\logs\SystemInfo\registry_windowsselfhost.txt"  
+    Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\SQMClient $CCMTempDir\logs\SystemInfo\registry_sqmmachineid.txt"  
 }
 
 #Gather SCCM Client Logs
@@ -208,6 +216,21 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
         If ( -not ( Test-Path alias:out-default ) ) { New-Alias Out-Default Write-Verbose -Scope Global } #Hack get-windowsUpdate writing to Out-Default instead of best practive of Write-host,etc
         Get-WindowsUpdateLog -LogPath $CCMTempDir\logs\WindowsUpdate\WindowsUpdate.log | Out-Null
         Remove-Item alias:Out-Default -Force -EA SilentlyContinue | Out-Null #Clean out hack to workaround out-default issue with Get-WindowsUpdate
+        
+        Invoke-Expression "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wu.txt"
+        Invoke-Expression "reg.exe export HKLM\SOFTWARE\Microsoft\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wuhandlers.txt"
+        Invoke-Expression "reg.exe export HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate $CCMTempDir\logs\WindowsUpdate\registry_wupolicy.txt"
+        Invoke-Expression "reg.exe export HKLM\Software\Microsoft\PolicyManager\current\device\Update $CCMTempDir\logs\WindowsUpdate\registry_wupolicy_mdm.txt"
+        Invoke-Expression "reg.exe export HKLM\Software\Microsoft\WindowsUpdate\UX\Settings $CCMTempDir\logs\WindowsUpdate\registry_wupolicy_UX.txt"
+
+        
+
+        #       Start-Bitstransfer https://logviz.blob.core.windows.net/tools/copylogs.exe -Destination $env:temp
+        #       Start-Process $env:temp\copylogs.exe -NoNewWindow
+        #       Start-Sleep -Seconds 115
+        #       Stop-Process -Name copylogs
+        #       $WindowsUpgradeZip = get-childitem $env:temp -Filter *.zip -recurse | Where-Object { $_.CreationTime -gt (Get-Date).AddMinutes(-2) } 
+        #       Move-Item -Path $WindowsUpgradeZip.FullName -Destination $CCMTempDir\logs\WindowsUpdate | Out-Null
     }
 
     Else {
@@ -218,7 +241,10 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
 #Gather Windows Defender Logs
 If ($GatherDefenderLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Defender | Out-Null
+    Start-Process -FilePath $env:ProgramFiles\Windows Defender\mpcmdrun.exe -GetFiles
     Copy-Item -Path '$env:ProgramData\Microsoft\Windows Defender\Support\*.log' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
+    Copy-Item -Path '$env:ProgramData\Microsoft\Windows Defender\Support\MPSupportFiles.cab' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
+    Start-Process -FilePath $env:ProgramFiles\Windows Defender\mpcmdrun.exe -GetFiles 
 }
 
 #Gather OneDrive Logs
@@ -310,6 +336,8 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 If ($GatherMDMDiagnostics -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\MDMLogs | Out-Null
     Copy-Item -Path $env:ProgramData\Microsoft\IntuneManagementExtension\Logs\*.log $CCMTempDir\logs\MDMLogs | Out-Null
+    Copy-Item -Path $env:windir\System32\winevt\Logs\Microsoft-Windows-DeviceManagement* -Filter *.evtx -Destination $CCMTempDir\logs\MDMLogs -Recurse -Force | Out-Null
+    Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\EnterpriseDesktopAppManagement $CCMTempDir\logs\MDMLogs\registry_IntuneApps.txt"  
     MDMDiagnosticstool.exe -out $CCMTempDir\logs\MDMLogs
     $areas = Get-ChildItem HKLM:Software\Microsoft\MDMDiagnostics\Area
     ForEach ($area in $areas) {
