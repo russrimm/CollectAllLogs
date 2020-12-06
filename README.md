@@ -27,7 +27,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 
 <sup>2</sup> See [Collect Microsoft Defender AV diagnostic data](https://docs.microsoft.com/en-us/windows/security/threat-protection/microsoft-defender-antivirus/collect-diagnostic-data) for more details.
 
-CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the *brilliant* MECM Guru David Anderson, Customer Engineer (he's really a PFE).  His wizardy and mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
+CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the *brilliant* MECM Guru David Anderson, PFE/CE.  David's mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
 
 ## Installation Instructions
 1. Copy **Microsoft.ConfigurationManagement.Messaging.dll** to \<***ConfigMgr Installation Dir***\>\CCM\Incoming\MessagingDll and \SMS_CCM\Temp on each Management Point
