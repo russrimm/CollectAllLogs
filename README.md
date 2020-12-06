@@ -18,7 +18,7 @@ The logs which are currently collectable by this solution are as follows:
 - PNP Driver Package enumeration
 - PNP Device enumeration
 - Modern Device Management Diagnostics Admin & Operational Eventlogs (AAD/MDM Enrollment)
-- MDMDiagnosticsTool 'area outputs for
+- MDMDiagnosticsTool "area" outputs for
   - Autopilot
   - Device Provisioning
   - Device Enrollment
