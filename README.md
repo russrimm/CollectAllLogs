@@ -11,13 +11,13 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |:-------------:|:----------------:|:-------------:|:------------------:|:-----------:|:---------:|
 |MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool \(provisioning, enrollment, autopilot\)|OneDrive Logs|Symantec Antivirus Exclusions|
 |MECM Client Registry Keys|Windows Update GPO Settings|PNP Devices & Drivers|MDM Eventlogs | | | |
-|MobileClient.TCF|CBS.LOG         |Filter Drivers|Device Provisioning | | |
-|CCMStore.SDF |Windows Update Agent Version Info|System/App/Setup Eventlogs|   Device Enrollment | | |
-|             |Edge Updates |Processes & Services|Intune Management Extension Logs| | |
+|MobileClient.TCF|CBS.LOG         |Filter Drivers|Device Provisioning & Enrollment | | |
+|CCMStore.SDF |Windows Update Agent Version Info|System/App/Setup Eventlogs|Intune Management Extension Logs| | |
+|             |Edge Updates |Processes & Services|| | |
 |             |SetupDiag Logs  |Language Packs| | | |
 |             |WU Install History|Delivery Optimization||||
 |             |WU Install Sources|Windows Servicing (Feature Upgrades)| | | |
-|             |                |   DISM.LOG   | | | |
+|             |                |DISM.LOG   | | | |
 |             |                |WaaS | | | |
 |             |                |Registry.POL corruption<sup>1</sup> | | | |
 |             |                |Windows Defender Logs | | | |
