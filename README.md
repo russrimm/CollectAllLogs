@@ -14,9 +14,9 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |MobileClient.TCF|CBS.LOG         |Filter Drivers|Device Provisioning & Enrollment | | |
 |CCMStore.SDF |Windows Update Agent Version Info|System/App/Setup Eventlogs|Intune Management Extension Logs| | |
 |             |Edge Updates |Processes & Services|| | |
-|             |SetupDiag Logs  |Language Packs| | | |
+|             |WU Install Sources|Language Packs| | | |
 |             |WU Install History|Delivery Optimization||||
-|             |WU Install Sources|Windows Servicing (Feature Upgrades)| | | |
+|             |                |Windows Servicing (Feature Upgrade) & SetupDiag Logs| | | |
 |             |                |DISM.LOG   | | | |
 |             |                |WaaS | | | |
 |             |                |Registry.POL corruption<sup>1</sup> | | | |
