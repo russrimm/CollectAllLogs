@@ -272,7 +272,7 @@ If ($GatherDefenderLogs -eq 'Yes') {
     Start-Process -FilePath $env:ProgramFiles\Windows Defender\mpcmdrun.exe -GetFiles
     Copy-Item -Path '$env:ProgramData\Microsoft\Windows Defender\Support\*.log' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
     Copy-Item -Path '$env:ProgramData\Microsoft\Windows Defender\Support\MPSupportFiles.cab' -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
-    Start-Process -FilePath $env:ProgramFiles\Windows Defender\mpcmdrun.exe -GetFiles 
+
 }
 
 #Gather OneDrive Logs
