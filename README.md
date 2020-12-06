@@ -35,7 +35,8 @@ The logs which are currently collectable by this solution are as follows:
 2. Create a new “Run Script” using the contents of the script “CollectAllLogs.ps1” and approve it.
 3. Place the MoveLogtoPrimary.ps1 to the primary site server in a <SCRIPTSDIR> of choice.
 4. Create a directory for logs <COLLECTALLLOGSDIR>
-5. Create a status filter rule with Message ID 1234
+5. Create a status filter rule with Message ID 1234 (see below)
+   ![Image-1](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img1.png "Image-1")
 6. On the Actions Tab, check “Run a Program”
    Command line:
    "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -executionpolicy bypass -file "<SCRIPTSDIR>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder <COLLECTALLLOGSDIR>
