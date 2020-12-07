@@ -35,7 +35,7 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 
 ## Installation Instructions
 1. Copy **Microsoft.ConfigurationManagement.Messaging.dll** to \<***ConfigMgr Installation Dir***\>\CCM\Incoming\MessagingDll on each Management Point. This directory will need created.
-2. Create a new **Run Script** using the contents of the script **CollectAllLogs.ps1** and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. ***CHANGING THIS CONFIGURATION SHOULD BE A BUSINESS DECISION***. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.
+2. In Software Library, create a new **Run Script** using the contents of the script **CollectAllLogs.ps1** and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. ***CHANGING THIS CONFIGURATION SHOULD BE A BUSINESS DECISION***. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.
 3. Place the **MoveLogtoPrimary.ps1** script to the primary site server in a directory of choice - going forward referred to as \<***ScriptsDir***\>.
 4. Create a directory for logs - going forward referred to as \<***CollectAllLogsDir***\>.
 5. On the **General** tab, create a status filter rule with Message ID **1234**.
@@ -52,7 +52,7 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 
 8. Move the new status filter rule up in priority somewhere towards the top.
 9. Right-click a single device or a collection of devices in the MECM console.
-10. Click **Run Script**.
+10. In Software Library, Click **Run Script**.
 11. Select the **Collect All Logs** script created in step 2 and click **Next** twice.
 
     ![Image-3](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img2.png "Image-3")
