@@ -23,8 +23,8 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             |                |Windows Defender Logs | | | |
 |             |                |Windows Defender Diagnostic Data<sup>2</sup>| | | |
 |             |                |Windows Setup Registry | | | | 
-|             |                || | | |
-|             |                | | | | |
+|             |                |BCD Store| | | |
+|             |                |Disks/Volumes| | | |
 
 
 <sup>1</sup> ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved. Registry.POL corruption is typically caused by antivirus exclusions not excluding it.***

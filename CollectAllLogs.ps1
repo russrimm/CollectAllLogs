@@ -229,6 +229,21 @@ If ($GatherSystemInfo -eq 'Yes') {
     $proc | Select-Object ProcessName, StartTime, Description, Path | Out-File $CCMTempDir\logs\SystemInfo\Processes.txt -Force # Processes
     $proc | Format-List * | Out-File $CCMTempDir\logs\Systeminfo\Processes.txt -Append
 
+    # Export BCD Store
+        cmd /c bcdedit.exe /enum all >> $CCMTempDir\SystemInfo\BCD-Store.txt
+        cmd /c bcdedit.exe /enum all /v >> $CCMTempDir\SystemInfo\BCD-Store_v.txt
+
+    # Export disk info
+        $disks = Get-Disk
+        foreach ($disk in $disks) {
+            $disk | Format-List * | Out-File $LogPath\Disks\DiskInfo.txt -Append
+            $disk | Get-Partition | Out-File $LogPath\Disks\DiskInfo.txt -Append
+        }
+
+        Get-Volume | Out-File $LogPath\Disks\Volume.txt -Force
+        Get-Volume | Format-List * | Out-File $LogPath\Disks\Volume.txt -Append
+    
+
 }
 
 #Gather SCCM Client Info
