@@ -1,5 +1,5 @@
 # CollectAllLogs
-A script developed by Microsoft Customer Engineers Russ Rimmerman and David Anderson.
+A script developed by Microsoft Customer Engineers [Russ Rimmerman](mailto://russ.rimmerman@microsoft.com) and David Anderson.
 ## Features
 CollectAllLogs is designed to be used with the **Run Scripts** feature of MECM (SCCM). The purpose of CollectAllLogs is to quickly and easily collect a very extensive list of logs, registry settings, and a variety of other diagnostic data from a device or collection of devices.  CollectAllLogs also works on clients which are connected to Cloud Management Gateway. Once deployed, the client will compress the payload and upload it using BITS to the client's assigned Management Point. Finally, a status message will be sent, triggering the parent site server to copy the compressed ZIP file from the Management Point to a configurable destination directory of choice.
 
