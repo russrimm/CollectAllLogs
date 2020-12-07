@@ -240,8 +240,8 @@ If ($GatherSystemInfo -eq 'Yes') {
             $disk | Get-Partition | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
         }
 
-        Get-Volume | Out-File $LogPath\Disks\Volume.txt -Force
-        Get-Volume | Format-List * | Out-File $LogPath\Disks\Volume.txt -Append
+        Get-Volume | Out-File $CCMTempDir\logs\SystemInfo\Volume.txt -Force
+        Get-Volume | Format-List * | Out-File $CCMTempDir\logs\SystemInfo\Volume.txt -Append
     
 
 }
@@ -303,16 +303,10 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
         catch {  }
 
         # Retrieve update sources
-        try {
             $SUS = New-Object -ComObject "Microsoft.Update.ServiceManager"
-            $defaultAUService = $SUS.Services | Where-Object { $_.IsDefaultAUService -eq $true } | Select-Object Name -ExpandProperty Name
-            if ($defaultAUService -ne "Windows Server Update Service")
-            { "WSUS is NOT the default update source! Review ...\WindowsUpdate\WindowsUpdateSources.txt" | Out-File "$CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt" }
-            else {  }
-        
-            $SUS.Services | Out-File $CCMTempDir\WindowsUpdate\WindowsUpdateSources.txt -Force
-        }
-        catch { "Failed to retrieve update sources! $($_.Exception.Message)" | Out-File "$CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt" }
+            "Default Automatic Update Source:" | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt
+            $SUS.Services | Where-Object { $_.IsDefaultAUService -eq $true } | Select-Object Name -ExpandProperty Name | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt -Append
+            $SUS.Services | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt -Append
         
         Function Test-IsRegistryPOLGood {
             [cmdletbinding()]
