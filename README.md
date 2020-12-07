@@ -34,7 +34,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the *brilliant and fearless* MECM Guru David Anderson, PFE/CE.  David's mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
 
 ## Installation Instructions
-1. Copy **Microsoft.ConfigurationManagement.Messaging.dll** to \<***ConfigMgr Installation Dir***\>\CCM\Incoming\MessagingDll and \SMS_CCM\Temp on each Management Point
+1. Copy **Microsoft.ConfigurationManagement.Messaging.dll** to \<***ConfigMgr Installation Dir***\>\CCM\Incoming\MessagingDll on each Management Point.
 2. Create a new **Run Script** using the contents of the script **CollectAllLogs.ps1** and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. ***CHANGING THIS CONFIGURATION SHOULD BE A BUSINESS DECISION***. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.
 3. Place the **MoveLogtoPrimary.ps1** script to the primary site server in a directory of choice - going forward referred to as \<***ScriptsDir***\>.
 4. Create a directory for logs - going forward referred to as \<***CollectAllLogsDir***\>.

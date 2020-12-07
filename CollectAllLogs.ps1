@@ -38,10 +38,8 @@ $GatherOneDriveLogs = 'Yes'
 $SendStatusMessage = 'Yes'
 $DumpSystemEventLog = 'Yes'
 $DumpSystemAppLog = 'Yes'
-$GatherSpecifiedLog = "GatherNothing"
 $GatherSepExclusions = 'No'
 $GatherMDMDiagnostics = 'Yes'
-$GatherDateCreatedRegistryPol = 'No'
 $SentstatusMessage = 'No'
 
 
@@ -336,11 +334,10 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
 #Gather Windows Defender Logs
 If ($GatherDefenderLogs -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Defender | Out-Null
-    $LatestDefenderDir=Get-ChildItem "$env:ProgramData\Microsoft\Windows Defender\Platform" | Sort-Object CreationTime | Select-Object -Last 1
-    Start-Process -FilePath "$LatestDefenderDir\MPCmdRun.exe" -ArgumentList "-GetFiles" -Wait
+    $LatestDefenderDir = (Get-ChildItem "$env:ProgramData\Microsoft\Windows Defender\Platform" | Sort-Object CreationTime | Select-Object -Last 1).FullName
+    Start-Process -FilePath $LatestDefenderDir\MPCmdRun.exe -ArgumentList "-GetFiles" -Wait
     Copy-Item -Path "$env:ProgramData\Microsoft\Windows Defender\Support\*.log" -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
     Copy-Item -Path "$env:ProgramData\Microsoft\Windows Defender\Support\MPSupportFiles.cab" -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
-
 }
 
 #Gather OneDrive Logs
