@@ -431,8 +431,8 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\Panther | Out-Null
     Copy-Item -Path $env:windir\panther -Filter *.log -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
     Copy-Item -Path $env:windir\panther -Filter *.XML -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
-    Invoke-Expression -Command "pnputil /enum-drivers >$CCMTempDir\logs\pnpdrivers.log" 
-    Invoke-Expression -Command "pnputil /enum-devices >$CCMTempDir\logs\pnpdevices.log"
+    Invoke-Expression -Command "pnputil /enum-drivers >$CCMTempDir\logs\SystemInfo\pnpdrivers.log" 
+    Invoke-Expression -Command "pnputil /enum-devices >$CCMTempDir\logs\\SystemInfo\pnpdevices.log"
 
     #Download SetupDiag
     #If this link ever breaks, you can get the updated link from https://go.microsoft.com/fwlink/?linkid=870142 which is the current SetupDiag download link.
