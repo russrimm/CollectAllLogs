@@ -60,3 +60,8 @@ CollectAllLogs wouldn't exist without the original idea and fully functional sta
 12. Monitor the path used for \<***CollectAllLogsDir***\> for a .zip file after around 5 minutes containing all of the requested files, eventlogs, registry exports, and system information which will be named \<***ComputerNameMM-DD-YYYYHHMMS\>.zip***.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
 
 If you have any additional ideas for logs or other diagnostics to collect, please feel free to contribute to this wonderful utility.
+
+## Appendix
+# Windows Defender Logs
+MPDetection*.log shows product, engine, service, and definition version updates and times
+MSSupportFiles.cab contains many in-depth files for analyting Windows Defender health and activities.
