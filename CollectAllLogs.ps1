@@ -230,14 +230,14 @@ If ($GatherSystemInfo -eq 'Yes') {
     $proc | Format-List * | Out-File $CCMTempDir\logs\Systeminfo\Processes.txt -Append
 
     # Export BCD Store
-        cmd /c bcdedit.exe /enum all >> $CCMTempDir\SystemInfo\BCD-Store.txt
-        cmd /c bcdedit.exe /enum all /v >> $CCMTempDir\SystemInfo\BCD-Store_v.txt
+        cmd /c bcdedit.exe /enum all >> $CCMTempDir\logs\SystemInfo\BCD-Store.txt
+        cmd /c bcdedit.exe /enum all /v >> $CCMTempDir\logs\SystemInfo\BCD-Store_v.txt
 
     # Export disk info
         $disks = Get-Disk
         foreach ($disk in $disks) {
-            $disk | Format-List * | Out-File $LogPath\Disks\DiskInfo.txt -Append
-            $disk | Get-Partition | Out-File $LogPath\Disks\DiskInfo.txt -Append
+            $disk | Format-List * | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
+            $disk | Get-Partition | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
         }
 
         Get-Volume | Out-File $LogPath\Disks\Volume.txt -Force
