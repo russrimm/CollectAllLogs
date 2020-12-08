@@ -51,14 +51,12 @@ First, start by reviewing lines 24-36 in CollectAllLogs.ps1 to determine if ther
 
    ![Image-2](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img3.png "Image-2")
 
-8. Move the new status filter rule up in priority somewhere towards the top.
-9. Right-click a single device or a collection of devices in the MECM console.
-10. In Software Library, Click **Run Script**.
-11. Select the **Collect All Logs** script created in step 2 and click **Next** twice.
+8. Right-click a single device or a collection of devices in the MECM console. In Software Library, Click **Run Script**.
+9. Select the **Collect All Logs** script created in step 2 and click **Next** twice.
 
     ![Image-3](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img2.png "Image-3")
 
-12. Monitor the path used for \<***CollectAllLogsDir***\> for a .zip file after around 5 minutes containing all of the requested files, eventlogs, registry exports, and system information which will be named \<***ComputerNameMM-DD-YYYYHHMMS\>.zip***.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
+10. Monitor the path used for \<***CollectAllLogsDir***\> for a .zip file after around 5 minutes containing all of the requested files, eventlogs, registry exports, and system information which will be named \<***ComputerNameMM-DD-YYYYHHMMS\>.zip***.  In my lab, these zip files range from 12MB to 60MB in size depending on the data collected, log historical retention settings and eventlog settings.  It is recommended to test this on smaller collections (<10 clients) to determine what, if any, impact will be noticed by the enduser and network overseers.
 
 If you have any additional ideas for logs or other diagnostics to collect, please feel free to contribute to this wonderful utility.
 
