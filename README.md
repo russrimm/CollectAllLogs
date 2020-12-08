@@ -16,7 +16,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             |Edge Updates |Processes & Services|| | |
 |             |Update Install Sources|Language Packs| | | |
 |             |Update Install History|Delivery Optimization||||
-|             |                |Windows Servicing (Feature Upgrade) & SetupDiag Logs| | | |
+|             |                |Windows Servicing (Feature Upgrade)| | | |
 |             |                |DISM.LOG   | | | |
 |             |                |WaaS | | | |
 |             |                |Registry.POL corruption<sup>1</sup> | | | |
@@ -25,6 +25,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             |                |Windows Setup Registry | | | | 
 |             |                |BCD Store| | | |
 |             |                |Disks/Volumes| | | |
+|             |                |SetupDiag Logs| | | |
 
 
 <sup>1</sup> ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved. Registry.POL corruption is typically caused by antivirus exclusions not excluding it.***
