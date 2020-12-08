@@ -49,7 +49,7 @@ First, start by reviewing lines 24-36 in CollectAllLogs.ps1 to determine if ther
   > **C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File "\<***ScriptsDir***\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder ***\<CollectAllLogsDir\>*****
 
 
-
+   ![Image-2](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img3.png "Image-2")
 
 8. Right-click a single device or a collection of devices in the MECM console. In Software Library, Click **Run Script**.
 9. Select the **Collect All Logs** script created in step 2 and click **Next** twice.
