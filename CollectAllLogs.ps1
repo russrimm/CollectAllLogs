@@ -35,6 +35,7 @@ $GatherDefenderLogs = 'Yes'
 $GatherEdgeUpdateLogs = 'Yes'
 $GatherLogsRelatedToWindowsServicing = 'Yes'
 $GatherOneDriveLogs = 'Yes'
+$GatherSetupDiagLogs = 'Yes'
 $SendStatusMessage = 'Yes'
 $DumpSystemEventLog = 'Yes'
 $DumpSystemAppLog = 'Yes'
@@ -211,7 +212,6 @@ If ($GatherSystemInfo -eq 'Yes') {
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DeliveryOptimization $CCMTempDir\logs\SystemInfo\registry_DO.txt"
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion $CCMTempDir\logs\SystemInfo\registry_buildinfo.txt"
     Invoke-Expression -Command "reg.exe export HKLM\SYSTEM\CurrentControlSet\Control\MUI\UILanguages $CCMTempDir\logs\SystemInfo\registry_langpack.txt"    
-    Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Superfetch $CCMTempDir\logs\SystemInfo\registry_superfetch.txt"  
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WaaSAssessment $CCMTempDir\logs\SystemInfo\registry_waasassessment.txt"  
     Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\WindowsSelfhost $CCMTempDir\logs\SystemInfo\registry_windowsselfhost.txt"  
     Invoke-Expression -Command "reg.exe export HKLM\Software\Microsoft\SQMClient $CCMTempDir\logs\SystemInfo\registry_sqmmachineid.txt"
@@ -342,8 +342,10 @@ If ($GatherDefenderLogs -eq 'Yes') {
 
 #Gather OneDrive Logs
 If ($GatherOneDriveLogs -eq 'Yes') {
+    If (Test-Path "$env:ProgramData\Microsoft OneDrive\Setup\logs") {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\OneDrive | Out-Null
-    Copy-Item -Path '$env:ProgramData\Microsoft OneDrive\Setup\logs\*.log' -Destination $CCMTempDir\logs\OneDrive -Force -Recurse | Out-Null
+    Copy-Item -Path "$env:ProgramData\Microsoft OneDrive\Setup\logs\*.log" -Destination $CCMTempDir\logs\OneDrive -Force -Recurse | Out-Null
+    }
 }
 
 #Gather Edge Update Logs
@@ -397,27 +399,6 @@ If ($DumpSystemAppLog -eq 'Yes') {
     #Clear-Eventlog -LogName $logFileName
 }
 
-#Gather Setup EventLogs
-If ($DumpSystemAppLog -eq 'Yes') {
-    # Config
-    $logFileName = "Setup" # Add Name of the Logfile (System, Application, etc)
-    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\EventLogs | Out-Null
-    $path = "$CCMTempDir\logs\EventLogs\" # Add Path, needs to end with a backsplash
-
-    # do not edit
-    $exportFileName = $logFileName + (Get-Date -f yyyyMMdd) + ".evt"
-    $logFile = Get-WmiObject Win32_NTEventlogFile | Where-Object { $_.logfilename -eq $logFileName }
-    $logFile.backupeventlog($path + $exportFileName) | Out-Null
-
-    # Deletes all .evt logfiles in $Path
-    # Be careful, this script removes all files with the extension .evt not just the selfcreated logfiles
-    $Daysback = "-7"
-
-    $CurrentDate = Get-Date
-    $DatetoDelete = $CurrentDate.AddDays($Daysback)
-    Get-ChildItem $Path | Where-Object { ($_.LastWriteTime -lt $DatetoDelete) -and ($_.Extension -eq ".evt") } | Remove-Item
-    #Clear-Eventlog -LogName $logFileName
-}
 
 #Gather Windows Servicing (In-Place Upgrade) Logs
 If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
@@ -430,12 +411,6 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
     Copy-Item -Path $env:windir\panther -Filter *.XML -Destination $CCMTempDir\logs -Recurse -Force | Out-Null
     Invoke-Expression -Command "pnputil /enum-drivers >$CCMTempDir\logs\SystemInfo\pnpdrivers.log" 
     Invoke-Expression -Command "pnputil /enum-devices >$CCMTempDir\logs\\SystemInfo\pnpdevices.log"
-
-    #Download SetupDiag
-    #If this link ever breaks, you can get the updated link from https://go.microsoft.com/fwlink/?linkid=870142 which is the current SetupDiag download link.
-    Start-BitsTransfer https://download.microsoft.com/download/d/8/1/d8149356-6590-4bec-b1bd-a2adcf84ace9/SetupDiag.exe -Destination $env:TEMP
-    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\SetupDiag | Out-Null
-    Invoke-Expression "$env:temp\SetupDiag.exe /Output:$CCMTempDir\logs\SetupDiag\SetupDiagResults.log /Ziplogs:False"
 
     #Gather log Files from C:\~BT
     If (Test-Path C:\~BT) {
@@ -450,13 +425,21 @@ If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 
     }
 }
+If ($GatherSetupDiagLogs -eq 'Yes') {
+    #Download SetupDiag
+    #If this link ever breaks, you can get the updated link from https://go.microsoft.com/fwlink/?linkid=870142 which is the current SetupDiag download link.
+    Start-BitsTransfer https://download.microsoft.com/download/d/8/1/d8149356-6590-4bec-b1bd-a2adcf84ace9/SetupDiag.exe -Destination $env:TEMP
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\SetupDiag | Out-Null
+    Invoke-Expression "$env:temp\SetupDiag.exe /Output:$CCMTempDir\logs\SetupDiag\SetupDiagResults.log /Ziplogs:False"
+}
+    
 
 #Gather MDM Diagnostics Logs
 If ($GatherMDMDiagnostics -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\MDMLogs | Out-Null
     Copy-Item -Path $env:ProgramData\Microsoft\IntuneManagementExtension\Logs\*.log $CCMTempDir\logs\MDMLogs | Out-Null
     Copy-Item -Path $env:windir\System32\winevt\Logs\Microsoft-Windows-DeviceManagement* -Filter *.evtx -Destination $CCMTempDir\logs\MDMLogs -Recurse -Force | Out-Null
-    Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\EnterpriseDesktopAppManagement $CCMTempDir\logs\MDMLogs\registry_IntuneApps.txt"  
+    If (Test-Path HKLM\SOFTWARE\Microsoft\EnterpriseDesktopAppManagement) {Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\EnterpriseDesktopAppManagement $CCMTempDir\logs\MDMLogs\registry_IntuneApps.txt"}
     MDMDiagnosticstool.exe -out $CCMTempDir\logs\MDMLogs
     $areas = Get-ChildItem HKLM:Software\Microsoft\MDMDiagnostics\Area
     ForEach ($area in $areas) {
