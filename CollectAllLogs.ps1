@@ -4,13 +4,6 @@
     
 .DESCRIPTION
     A complete script that collects key troubleshooting data from endpoints.
-     
-.EXAMPLES
-    .\SCCM-ClientHealthMonitor.ps1 -TestProvMode -TestGPOFiles (this will run the test and remediation for both options and log to file locally)
-
-    .\SCCM-ClientHealthMonitor.ps1 -TestProvMode -TestGPOFiles -SendEmail (this will run the test and remediation for both options and log to file locally and send an email with the log attached)
-
-    .\SCCM-ClientHealthMonitor.ps1 -TestSCCMClient -TestBITS -TestProvMode -TestGPOFiles -InstallSCCMClient -EmailStatus -TeamsStatus
 
 .NOTES
     Filename: CollectAllLogs.ps1
