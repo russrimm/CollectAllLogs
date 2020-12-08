@@ -65,5 +65,5 @@ If you have any additional ideas for logs or other diagnostics to collect, pleas
 ## Appendix
 # Windows Defender Logs
 
->MPDetection*.log shows product, engine, service, and definition version updates and times
+>MPDetection*.log shows product, engine, service, and definition version updates and update times.
 >MSSupportFiles.cab contains a significant amount of in-depth files for analysis for Windows Defender health and activities.
