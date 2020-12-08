@@ -33,7 +33,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 
 ## Installation Instructions
 
-First, start by reviewing lines 31-43 in CollectAllLogs.ps1 to determine if there are any logs you do not need.  If you set them to 'No', that section will not execute.  Otherwise, the default is to log everything except Symantec Antivirus Exclusions.
+First, start by reviewing lines 24-36 in CollectAllLogs.ps1 to determine if there are any logs you do not need.  If you set them to 'No', that section will not execute.  Otherwise, the default is to log everything except Symantec Antivirus Exclusions.
 
 1. Copy the file **Microsoft.ConfigurationManagement.Messaging.dll** to \<***ConfigMgr Installation Dir***\>\CCM\Incoming\MessagingDll on each Management Point. The \CCM\Incoming should already exist on each MP, but the MessagingDll directory will need created.
 2. In Software Library, create a new **Run Script** using the contents of the script **CollectAllLogs.ps1** and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. ***CHANGING THIS CONFIGURATION SHOULD BE A BUSINESS DECISION***. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.
