@@ -12,7 +12,7 @@ $CMGConnected = $false
 
 Function DetermineIfCMG {
     Param([string]$MP)
-    If ($MP -match "CCM_PROXY_MUTUALAUTH") {
+    If ($MP -Match "CCM_PROXY_MUTUALAUTH") {
         $CMGConnected = $true
         $MPIndex = $InsString1.IndexOf('/')
         $MP = $MP.Substring(0, $MPIndex)
@@ -35,7 +35,7 @@ Function Get-CCMIncominglocation {
         $CCMIncomingPath = $CCMInComingIISV2.path
     }
 
-    ElseIf (Get-WmiObject -ComputerName $InsString1 -Namespace Root -Class __NAMESPACE -filter "name='WebAdministration'") {
+    ElseIf (Get-WmiObject -ComputerName $InsString1 -Namespace Root -Class __NAMESPACE -Filter "name='WebAdministration'") {
         $CCMIncomingWebAdminPath = Get-WmiObject -Class 'VirtualDirectory' -ComputerName $InsString1 -Namespace 'ROOT\WebAdministration' | Where-Object ApplicationPath -eq  '/CCM_Incoming' | Select-Object PhysicalPath
         $CCMIncomingPath = $CCMIncomingPath.PhysicalPath
     }
