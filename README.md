@@ -47,7 +47,7 @@ First, start by reviewing lines 24-36 in CollectAllLogs.ps1 to determine if ther
 6. On the **Actions** tab, check the **Run a program** box.
 7. Enter the following command line into the **Program** blank and click **Ok**.
 
-  > **C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File "\<***ScriptsDir***\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -PrimaryLogFolder ***\<CollectAllLogsDir\>*****
+  > **C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -ExecutionPolicy Bypass -File "\<***ScriptsDir***\>\MoveLogtoPrimary.ps1" -InsString1 %msgis01 -InsString2 %msgis02 -LogFolder ***\<CollectAllLogsDir\>*****
 
 
    ![Image-2](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img5.png "Image-2")

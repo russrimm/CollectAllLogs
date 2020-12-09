@@ -5,7 +5,7 @@
 Param(
     [Parameter(Mandatory = $True)][string] $InsString1,
     [Parameter(Mandatory = $True)][string] $InsString2,
-    [Parameter(Mandatory = $True)][string] $ParentLogFolder
+    [Parameter(Mandatory = $True)][string] $LogFolder
 )
 $CMGConnected = $false
 
