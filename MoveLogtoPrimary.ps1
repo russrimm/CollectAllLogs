@@ -51,7 +51,7 @@ Function DetermineSiteHiearchy {
     $computer = $env:COMPUTERNAME
     $FQDNSystemName = [System.Net.Dns]::GetHostByName(($env:computerName)) | Select-Object Hostname -ExpandProperty Hostname
     $CASServerName = $null
-    $CASServerName = Get-WmiObject -Class 'SMS_Site' -ComputerName $computer -Namespace "ROOT\SMS\$SiteCode" | Where-Object Type -eq 4 | Select-Object Servername -ExpandProperty servername
+    $CASServerName = Get-WmiObject -Class 'SMS_Site' -ComputerName $computer -Namespace "ROOT\SMS\$SiteCode" | Where-Object Type -eq 4 | Select-Object ServerName -ExpandProperty ServerName
     Return $CASServerName
 }
 
@@ -59,7 +59,7 @@ Function DetermineSiteHiearchy {
 $CASServerName = $null
 $InsString1 = DetermineIfCMG -MP $InsString1
 
-$CCMIncoming = get-CCMIncominglocation
+$CCMIncoming = Get-CCMIncomingLocation
 $CCMIncoming = $CCMIncoming -replace ":", "$"
 $CCMIncoming = "\\$InsString1\$CCMIncoming"
 
@@ -71,7 +71,7 @@ If ($null -eq $CASServerName) {
 
 Else {
     $CASServerLogFolder = "\\$CASServerName\d$\$ParentLogFolder"
-    move-Item "$CCMIncoming\$InsString2" $CASServerLogFolder -Force
+    Move-Item "$CCMIncoming\$InsString2" $CASServerLogFolder -Force
 }
 
 
