@@ -221,18 +221,18 @@ If ($GatherSystemInfo -eq 'Yes') {
     $proc | Format-List * | Out-File $CCMTempDir\logs\Systeminfo\Processes.txt -Append
 
     # Export BCD Store
-        cmd /c bcdedit.exe /enum all >> $CCMTempDir\logs\SystemInfo\BCD-Store.txt
-        cmd /c bcdedit.exe /enum all /v >> $CCMTempDir\logs\SystemInfo\BCD-Store_v.txt
+    cmd /c bcdedit.exe /enum all >> $CCMTempDir\logs\SystemInfo\BCD-Store.txt
+    cmd /c bcdedit.exe /enum all /v >> $CCMTempDir\logs\SystemInfo\BCD-Store_v.txt
 
     # Export disk info
-        $disks = Get-Disk
-        foreach ($disk in $disks) {
-            $disk | Format-List * | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
-            $disk | Get-Partition | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
-        }
+    $disks = Get-Disk
+    foreach ($disk in $disks) {
+        $disk | Format-List * | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
+        $disk | Get-Partition | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
+    }
 
-        Get-Volume | Out-File $CCMTempDir\logs\SystemInfo\Volume.txt -Force
-        Get-Volume | Format-List * | Out-File $CCMTempDir\logs\SystemInfo\Volume.txt -Append
+    Get-Volume | Out-File $CCMTempDir\logs\SystemInfo\Volume.txt -Force
+    Get-Volume | Format-List * | Out-File $CCMTempDir\logs\SystemInfo\Volume.txt -Append
     
 
 }
@@ -294,10 +294,10 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
         catch {  }
 
         # Retrieve update sources
-            $SUS = New-Object -ComObject "Microsoft.Update.ServiceManager"
-            "Default Automatic Update Source:" | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt
-            $SUS.Services | Where-Object { $_.IsDefaultAUService -eq $true } | Select-Object Name -ExpandProperty Name | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt -Append
-            $SUS.Services | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt -Append
+        $SUS = New-Object -ComObject "Microsoft.Update.ServiceManager"
+        "Default Automatic Update Source:" | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt
+        $SUS.Services | Where-Object { $_.IsDefaultAUService -eq $true } | Select-Object Name -ExpandProperty Name | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt -Append
+        $SUS.Services | Out-File $CCMTempDir\logs\WindowsUpdate\WindowsUpdateSources.txt -Append
         
         Function Test-IsRegistryPOLGood {
             [cmdletbinding()]
@@ -315,8 +315,8 @@ If ($GatherWindowsUpdateLogs -eq 'Yes') {
         }
         $ComplianceChk = Test-IsRegistryPOLGood
 
-        If ($ComplianceChk -eq 'Compliant' ) {"Registry.POL is NOT corrupted." | Out-File "$CCMTempDir\logs\SystemInfo\REGISTRYPOL.GOOD.TXT"}
-        Else {"Registry.POL IS CORRUPT. It is recommended to delete it and verify it is excluded in antivirus exclusions." | Out-File "$CCMTempDir\logs\SystemInfo\REGISTRY.POL.CORRUPTED.TXT"}
+        If ($ComplianceChk -eq 'Compliant' ) { "Registry.POL is NOT corrupted." | Out-File "$CCMTempDir\logs\SystemInfo\REGISTRYPOL.GOOD.TXT" }
+        Else { "Registry.POL IS CORRUPT. It is recommended to delete it and verify it is excluded in antivirus exclusions." | Out-File "$CCMTempDir\logs\SystemInfo\REGISTRY.POL.CORRUPTED.TXT" }
     }
 
     Else {
@@ -336,8 +336,8 @@ If ($GatherDefenderLogs -eq 'Yes') {
 #Gather OneDrive Logs
 If ($GatherOneDriveLogs -eq 'Yes') {
     If (Test-Path "$env:ProgramData\Microsoft OneDrive\Setup\logs") {
-    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\OneDrive | Out-Null
-    Copy-Item -Path "$env:ProgramData\Microsoft OneDrive\Setup\logs\*.log" -Destination $CCMTempDir\logs\OneDrive -Force -Recurse | Out-Null
+        New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\OneDrive | Out-Null
+        Copy-Item -Path "$env:ProgramData\Microsoft OneDrive\Setup\logs\*.log" -Destination $CCMTempDir\logs\OneDrive -Force -Recurse | Out-Null
     }
 }
 
@@ -432,7 +432,9 @@ If ($GatherMDMDiagnostics -eq 'Yes') {
     New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\MDMLogs | Out-Null
     Copy-Item -Path $env:ProgramData\Microsoft\IntuneManagementExtension\Logs\*.log $CCMTempDir\logs\MDMLogs | Out-Null
     Copy-Item -Path $env:windir\System32\winevt\Logs\Microsoft-Windows-DeviceManagement* -Filter *.evtx -Destination $CCMTempDir\logs\MDMLogs -Recurse -Force | Out-Null
-    If (Test-Path HKLM\SOFTWARE\Microsoft\EnterpriseDesktopAppManagement) {Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\EnterpriseDesktopAppManagement $CCMTempDir\logs\MDMLogs\registry_IntuneApps.txt"}
+    If (Test-Path HKLM\SOFTWARE\Microsoft\EnterpriseDesktopAppManagement) { Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\EnterpriseDesktopAppManagement $CCMTempDir\logs\MDMLogs\registry_IntuneApps.txt" }
+    If (Test-Path HKLM\SOFTWARE\Microsoft\PolicyManager) { Invoke-Expression -Command "reg.exe export HKLM\SOFTWARE\Microsoft\PolicyManager $CCMTempDir\logs\MDMLogs\registry_IntunePolicy.txt" }
+    Invoke-Expression "dsregcmd.exe /status > $CCMTempDir\logs\MDMLogs\DSREGCMDSTATUS.log"
     MDMDiagnosticstool.exe -out $CCMTempDir\logs\MDMLogs
     $areas = Get-ChildItem HKLM:Software\Microsoft\MDMDiagnostics\Area
     ForEach ($area in $areas) {
