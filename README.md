@@ -9,12 +9,12 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 
 | MECM | Windows Update | Base OS |        MDM       |    Office365   |3rd Party|
 |:-------------:|:----------------:|:-------------:|:------------------:|:-----------:|:---------:|
-|MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDM Diagnostics Tool \(provisioning, enrollment, autopilot\) output|OneDrive Logs|Symantec Antivirus Exclusions|
-|MECM Client Registry Keys|Windows Update GPO Settings|PNP Devices & Drivers|MDM Eventlogs | | | |
+|MECM Client Logs|Windows Update Agent Version, Install Sources, Install History, Registry & GPO Settings|Windows Setup|MDM Diagnostics Tool \(provisioning, enrollment, autopilot\) output|OneDrive Logs|Symantec Antivirus Exclusions|
+|MECM Client Registry Keys|Edge Updates|PNP Devices & Drivers|MDM Eventlogs | | | |
 |MobileClient.TCF|CBS.LOG         |Filter Drivers|AAD Device Provisioning | | |
-|CCMStore.SDF |Windows Update Agent Version Info|Eventlogs (System/Application)|Intune Policies, Enrollment Status, & Management Extension Logs| | |
-|             |Edge Updates |Running Processes & Services|| | |
-|             |Windows Update Install Sources & History|Language Packs|| | |
+|CCMStore.SDF ||Eventlogs (System/Application)|Intune Policies, Enrollment Status, & Management Extension Logs| | |
+|             | |Running Processes & Services|| | |
+|             ||Language Packs|| | |
 |             |                |Delivery Optimization||||
 |             |                |Windows Servicing (Feature Upgrade)| | | |
 |             |                |DISM.LOG   | | | |
