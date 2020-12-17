@@ -330,6 +330,7 @@ If ($GatherDefenderLogs -eq 'Yes') {
     $LatestDefenderDir = (Get-ChildItem "$env:ProgramData\Microsoft\Windows Defender\Platform" | Sort-Object CreationTime | Select-Object -Last 1).FullName
     Start-Process -FilePath $LatestDefenderDir\MPCmdRun.exe -ArgumentList "-GetFiles" -Wait
     Get-MPPreference | Out-File -FilePath $CCMTempDir\logs\Defender\DefenderPreferences.log
+    Get-MPComputerStatus | Out-File -FilePath $CCMTempDir\logs\Defender\DefenderStatus.log
     Copy-Item -Path "$env:ProgramData\Microsoft\Windows Defender\Support\*.log" -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
     Copy-Item -Path "$env:ProgramData\Microsoft\Windows Defender\Support\MPSupportFiles.cab" -Destination $CCMTempDir\logs\Defender -Force -Recurse | Out-Null
 }
