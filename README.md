@@ -16,15 +16,15 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             | |Running Processes & Services|| | |
 |             ||Language Packs|| | |
 |             |                |Delivery Optimization||||
-|             |                |Windows Servicing (Feature Upgrade)| | | |
+|             |                |Windows Servicing (Feature Upgrade) & SetupDiag Logs| | | |
 |             |                |DISM.LOG   | | | |
 |             |                |WaaS | | | |
 |             |                |Registry.POL corruption<sup>1</sup> | | | |
 |             |                |Windows Defender Logs, Preferences, & Diagnostic Data<sup>2</sup> | | | |
-|             |                |SetupDiag Logs| | | |
+|             |                |Disk/Volume Info| | | |
 |             |                |Windows Setup Registry values| | | | 
 |             |                |BCD Store| | | |
-|             |                |Disk/Volume Info| | | |
+|             |                || | | |
 |             |                || | | |
 
 
