@@ -20,9 +20,9 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             |                |DISM.LOG   | | | |
 |             |                |WaaS | | | |
 |             |                |Registry.POL corruption<sup>1</sup> | | | |
-|             |                |Windows Defender Logs | | | |
+|             |                |Windows Defender Logs, Preferences, & Diagnostic Data<sup>2</sup> | | | |
 |             |                |Windows Defender Diagnostic Data<sup>2</sup>| | | |
-|             |                |Windows Setup Registry | | | | 
+|             |                |Windows Setup Registry values| | | | 
 |             |                |BCD Store| | | |
 |             |                |Disks/Volumes| | | |
 |             |                |SetupDiag Logs| | | |
