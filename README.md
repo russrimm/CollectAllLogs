@@ -39,7 +39,7 @@ First, start by reviewing lines 24-37 in CollectAllLogs.ps1 to determine if ther
 1. Copy the file **Microsoft.ConfigurationManagement.Messaging.dll** to \<***ConfigMgr Installation Dir***\>\CCM\Incoming\MessagingDll on each Management Point. The \CCM\Incoming should already exist on each MP, but the MessagingDll directory will need created.
 2. In Software Library, create a new **Run Script** using the contents of the script **CollectAllLogs.ps1** and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. ***CHANGING THIS CONFIGURATION SHOULD BE A BUSINESS DECISION***. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.
 3. Place the **MoveLogtoPrimary.ps1** script into the primary site server in a directory of choice - going forward referred to as \<***ScriptsDir***\>.
-4. Create a directory for logs - going forward referred to as \<***CollectAllLogsDir***\>.  \<***CollectAllLogsDir***\> can either be a local path on the site server, or a UNC path on a remote server. The only requirement is that the site server's computer account must be a local administrator on the remote server where this destination share is.
+4. Create a directory for logs - going forward referred to as \<***CollectAllLogsDir***\>.  \<***CollectAllLogsDir***\> can either be a local path on the site server, or a UNC path on a remote server. The only requirement is that the site server's computer account must have create rights to this destination share.
 5. On the **General** tab, create a status filter rule with Message ID **1234**.
 
    ![Image-1](https://rimcoblob.blob.core.windows.net/blogimg/CollectAllLogs/img1.png "Image-1")
