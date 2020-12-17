@@ -11,21 +11,21 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |:-------------:|:----------------:|:-------------:|:------------------:|:-----------:|:---------:|
 |MECM Client Logs|Windows Update Registry Settings|Windows Setup|MDMDiagnosticsTool \(provisioning, enrollment, autopilot\)|OneDrive Logs|Symantec Antivirus Exclusions|
 |MECM Client Registry Keys|Windows Update GPO Settings|PNP Devices & Drivers|MDM Eventlogs | | | |
-|MobileClient.TCF|CBS.LOG         |Filter Drivers|Device Provisioning & Enrollment | | |
-|CCMStore.SDF |Windows Update Agent Version Info|Eventlogs (System/Application)|Intune Management Extension Logs| | |
-|             |Edge Updates |Running Processes & Services|Intune Policies| | |
-|             |Windows Update Install Sources & History|Language Packs|Intune Registration Status| | |
+|MobileClient.TCF|CBS.LOG         |Filter Drivers|AAD Device Provisioning | | |
+|CCMStore.SDF |Windows Update Agent Version Info|Eventlogs (System/Application)|Intune Policies, Enrollment Status, & Management Extension Logs| | |
+|             |Edge Updates |Running Processes & Services|| | |
+|             |Windows Update Install Sources & History|Language Packs|| | |
 |             |                |Delivery Optimization||||
 |             |                |Windows Servicing (Feature Upgrade)| | | |
 |             |                |DISM.LOG   | | | |
 |             |                |WaaS | | | |
 |             |                |Registry.POL corruption<sup>1</sup> | | | |
 |             |                |Windows Defender Logs, Preferences, & Diagnostic Data<sup>2</sup> | | | |
-|             |                |Windows Defender Diagnostic Data<sup>2</sup>| | | |
+|             |                |SetupDiag Logs| | | |
 |             |                |Windows Setup Registry values| | | | 
 |             |                |BCD Store| | | |
-|             |                |Disks/Volumes| | | |
-|             |                |SetupDiag Logs| | | |
+|             |                |Disk/Volume Info| | | |
+|             |                || | | |
 
 
 <sup>1</sup> ***Corruption of REGISTRY.POL is known to cause GPOs and Software Updates to fail indefinitely until resolved. Registry.POL corruption is typically caused by antivirus exclusions not excluding it.***
