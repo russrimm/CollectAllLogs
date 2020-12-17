@@ -226,7 +226,7 @@ If ($GatherSystemInfo -eq 'Yes') {
 
     # Export disk info
     $disks = Get-Disk
-    foreach ($disk in $disks) {
+    ForEach ($disk in $disks) {
         $disk | Format-List * | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
         $disk | Get-Partition | Out-File $CCMTempDir\logs\SystemInfo\DiskInfo.txt -Append
     }

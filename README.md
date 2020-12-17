@@ -1,7 +1,7 @@
 # CollectAllLogs
 
 ## Features
-The CollectAllLogs script is designed to be pushed to clients using the **Run Scripts** feature of MECM (SCCM). The purpose of CollectAllLogs is to quickly and easily collect a very extensive list of logs, registry settings, and a variety of other diagnostic data from a device or collection of devices.  CollectAllLogs also works on clients which are connected to Cloud Management Gateway (with PKI only. Enhanced HTTP is not yet supported). Once pushed to a client, the client will compress the payload and upload the compressed ZIP file using BITS to the client's assigned Management Point. Finally, a status message will be sent which will trigger the site server to copy the compressed ZIP file from the Management Point to a configurable destination directory of choice.
+The CollectAllLogs script is designed to be pushed to clients using the **Run Scripts** feature of Microsoft Endpoint Configuration Manager (MECM/SCCM/ConfigMgr). The purpose of CollectAllLogs is to quickly and effortlessly collect a very extensive list of logs, registry settings, and a variety of other diagnostic data from a single device or collection of devices.  CollectAllLogs also works on clients which are remotely connected by way of Cloud Management Gateway (CMG) (with PKI only. Enhanced HTTP is not yet supported as the client will gather, but not upload). Once the CollectAllLogs script is pushed to a client using the Run Scripts functionality, the client will gather, compress and upload a compressed ZIP file (using BITS) to the client's currently assigned Management Point. Finally, a status message will be sent up which will trigger a status filter rule running on the site server to move the compressed ZIP file from the Management Point to a configurable location of choice.
 
 >Note: This script has not yet been tested thoroughly in a hierarchy (with a CAS).  If you have a CAS you will need to edit line 73 of MoveLogToPrimary.ps1 to reflect where you want your logs stored. Please provide feedback if you test the solution in a hierarchy.
 
@@ -16,7 +16,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 |             | |Running Processes & Services|| | |
 |             ||Language Packs|| | |
 |             |                |Delivery Optimization||||
-|             |                |Windows Servicing (Feature Upgrade) & SetupDiag Logs| | | |
+|             |                |Windows Servicing & SetupDiag Logs| | | |
 |             |                |DISM.LOG   | | | |
 |             |                |WaaS | | | |
 |             |                |Registry.POL corruption<sup>1</sup> | | | |
@@ -34,7 +34,7 @@ The logs, registry settings, and diagnostic data which can currently be collecte
 
 ## Installation Instructions
 
-First, start by reviewing lines 24-36 in CollectAllLogs.ps1 to determine if there are any logs you do not need.  If you set them to 'No', that section will not execute.  Otherwise, the default is to log everything except Symantec Antivirus Exclusions.
+First, start by reviewing lines 24-37 in CollectAllLogs.ps1 to determine if there are any logs you do not need.  If there are, set them to 'No' so that bit of collection will not happen.  Otherwise, everything is 'Yes' by default except for Symantec Antivirus Exclusions.
 
 1. Copy the file **Microsoft.ConfigurationManagement.Messaging.dll** to \<***ConfigMgr Installation Dir***\>\CCM\Incoming\MessagingDll on each Management Point. The \CCM\Incoming should already exist on each MP, but the MessagingDll directory will need created.
 2. In Software Library, create a new **Run Script** using the contents of the script **CollectAllLogs.ps1** and approve it. If you aren't able to approve your own script, there is a checkbox in Hierarchy Settings to allow you to. ***CHANGING THIS CONFIGURATION SHOULD BE A BUSINESS DECISION***. As a best practice, only approve your own scripts if you're a proven perfectionist, or you have a true lab.
