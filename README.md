@@ -65,7 +65,7 @@ If you have any additional ideas for logs or other diagnostics to collect, pleas
 The CollectAllLogs script was developed by Microsoft Customer Engineers [Russ Rimmerman](mailto://russ.rimmerman@microsoft.com) and David Anderson. CollectAllLogs wouldn't exist without the original idea and fully functional starting script provided by the *brilliant and fearless* MECM Guru David Anderson, PFE/CE.  David's mastery of Powershell scripting facilitated the complete plumbing and initial foundation of this utility.
 
 ## Appendix
-# Windows Defender Logs
+## Windows Defender Logs
 
 >MPDetection*.log shows product, engine, service, and definition version updates and update times.
 >MSSupportFiles.cab contains a significant amount of in-depth files for analysis for Windows Defender health and activities.
