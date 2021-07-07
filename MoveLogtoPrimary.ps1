@@ -66,11 +66,11 @@ $CCMIncoming = "\\$InsString1\$CCMIncoming"
 $CASServerName = DetermineSiteHiearchy
 
 If ($null -eq $CASServerName) {
-    Move-Item "$CCMIncoming\$InsString2" $ParentLogFolder -Force
+    Move-Item "$CCMIncoming\$InsString2" $LogFolder -Force
 }
 
 Else {
-    $CASServerLogFolder = "\\$CASServerName\d$\$ParentLogFolder"
+    $CASServerLogFolder = "\\$CASServerName\d$\$LogFolder"
     Move-Item "$CCMIncoming\$InsString2" $CASServerLogFolder -Force
 }
 
