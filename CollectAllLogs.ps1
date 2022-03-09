@@ -32,6 +32,7 @@ $GatherSetupDiagLogs = 'Yes'
 $SendStatusMessage = 'Yes'
 $DumpSystemEventLog = 'Yes'
 $DumpSystemAppLog = 'Yes'
+$DumpBitlockerEventLog = 'Yes'
 $GatherSepExclusions = 'No'
 $GatherMDMDiagnostics = 'Yes'
 $SentstatusMessage = 'No'
@@ -394,6 +395,26 @@ If ($DumpSystemAppLog -eq 'Yes') {
     #Clear-Eventlog -LogName $logFileName
 }
 
+#Gather Bitlocker Management EventLog
+If ($DumpBitlockerEventLog -eq 'Yes') {
+    # Config
+    $logFileName = "Bitlocker" # Add Name of the Logfile (System, Application, etc)
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\EventLogs | Out-Null
+    $path = "$CCMTempDir\logs\EventLogs\" # Add Path, needs to end with a backsplash
+
+    # do not edit
+    $exportFileName = $logFileName + (Get-Date -f yyyyMMdd) + ".evt"
+    $logFile = Get-WinEvent -logname "Microsoft-Windows-BitLocker/Bitlocker Management" | Out-File $CCMTempDir\logs\$exportFileName
+
+    # Deletes all .evt logfiles in $Path
+    # Be careful, this script removes all files with the extension .evt not just the selfcreated logfiles
+    $Daysback = "-7"
+
+    $CurrentDate = Get-Date
+    $DatetoDelete = $CurrentDate.AddDays($Daysback)
+    Get-ChildItem $Path | Where-Object { ($_.LastWriteTime -lt $DatetoDelete) -and ($_.Extension -eq ".evt") } | Remove-Item
+    #Clear-Eventlog -LogName $logFileName
+}
 
 #Gather Windows Servicing (In-Place Upgrade) Logs
 If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
