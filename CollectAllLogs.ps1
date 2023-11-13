@@ -36,6 +36,7 @@ $DumpBitlockerEventLog = 'Yes'
 $GatherSepExclusions = 'No'
 $GatherMDMDiagnostics = 'Yes'
 $SentstatusMessage = 'No'
+$GatherPSADTLogs = 'Yes'
 
 
 $UploadedClientLogs = $False
@@ -547,6 +548,11 @@ If ($GatherSepExclusions -eq 'Yes') {
     }
 }
 
+#Gather PSADT Logs
+If ($GatherPSADTLogs -eq 'Yes') {
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\PSADT\Logs | Out-Null
+    Copy-Item -Path $env:windir\logs\Software\*.log -Destination $CCMTempDir\logs\PSADT\Logs -Force -Recurse | Out-Null
+}
 
 New-ZipFile $LogsZip $CCMFilestoZip | Out-Null
 
