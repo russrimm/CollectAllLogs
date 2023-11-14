@@ -20,26 +20,51 @@
     This script was developed in a collaborative effort by Microsoft Customer Engineers Russ Rimmerman and David Anderson.
     
 #> 
+Param(
+    # Specify which logs to collect or leave it to Default to select everything pre-configured in the default switch option below.
+    [Parameter(Mandatory = $true)]
+    [ValidateSet('SystemInfo', 'BaseSCCMLogs', 'WindowsUpdateLogs', 'DefenderLogs', 'EdgeUpdateLogs', 'LogsRelatedToWindowsServicing', 'OneDriveLogs', 'SetupDiagLogs', 'SystemEventLog', 'SystemAppLog', 'BitlockerEventLog', 'SysmonEventLog', 'SepExclusions', 'MDMDiagnostics', 'PSADTLogs')]
+    [String]$LogsToCollect = 'Default'
+)
 
-$GatherSystemInfo = 'Yes'
-$GatherBaseSCCMLogs = 'Yes'
-$GatherWindowsUpdateLogs = 'Yes'
-$GatherDefenderLogs = 'Yes'
-$GatherEdgeUpdateLogs = 'Yes'
-$GatherLogsRelatedToWindowsServicing = 'Yes'
-$GatherOneDriveLogs = 'Yes'
-$GatherSetupDiagLogs = 'Yes'
+#Different run options based on what switch is provided to the script.
+Switch ($LogsToCollect) {
+    'SystemInfo' {$GatherSystemInfo = 'Yes'}
+    'BaseSCCMLogs' {$GatherBaseSCCMLogs = 'Yes'}
+    'WindowsUpdateLogs' {$GatherWindowsUpdateLogs = 'Yes'}
+    'DefenderLogs' {$GatherDefenderLogs = 'Yes'}
+    'EdgeUpdateLogs' {$GatherEdgeUpdateLogs = 'Yes'}
+    'LogsRelatedToWindowsServicing' {$GatherLogsRelatedToWindowsServicing = 'Yes'}
+    'OneDriveLogs' {$GatherOneDriveLogs = 'Yes'}
+    'SetupDiagLogs' {$GatherSetupDiagLogs = 'Yes'}
+    'SystemEventLog' {$DumpSystemEventLog = 'Yes'}
+    'SystemAppLog' {$DumpSystemAppLog = 'Yes'}
+    'BitlockerEventLog' {$DumpBitlockerEventLog = 'Yes'}
+    'SysmonEventLog' {$DumpSysmonEventLog = 'Yes'}
+    'SepExclusions' {$GatherSepExclusions = 'Yes'}
+    'MDMDiagnostics' {$GatherMDMDiagnostics = 'Yes'}
+    'PSADTLogs' {$GatherPSADTLogs = 'Yes'}
+    default {
+        $GatherSystemInfo = 'Yes'
+        $GatherBaseSCCMLogs = 'Yes'
+        $GatherWindowsUpdateLogs = 'Yes'
+        $GatherDefenderLogs = 'Yes'
+        $GatherEdgeUpdateLogs = 'Yes'
+        $GatherLogsRelatedToWindowsServicing = 'Yes'
+        $GatherOneDriveLogs = 'Yes'
+        $GatherSetupDiagLogs = 'Yes'
+        $DumpSystemEventLog = 'Yes'
+        $DumpSystemAppLog = 'Yes'
+        $DumpBitlockerEventLog = 'Yes'
+        $DumpSysmonEventLog = 'Yes'
+        $GatherSepExclusions = 'No'
+        $GatherMDMDiagnostics = 'Yes'
+        $GatherPSADTLogs = 'Yes'
+    }
+}
+
 $SendStatusMessage = 'Yes'
-$DumpSystemEventLog = 'Yes'
-$DumpSystemAppLog = 'Yes'
-$DumpBitlockerEventLog = 'Yes'
-$DumpSysmonEventLog = 'Yes'
-$GatherSepExclusions = 'No'
-$GatherMDMDiagnostics = 'Yes'
 $SentstatusMessage = 'No'
-$GatherPSADTLogs = 'Yes'
-
-
 $UploadedClientLogs = $False
 
 $MP = $null
