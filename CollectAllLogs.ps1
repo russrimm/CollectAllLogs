@@ -23,7 +23,7 @@
 Param(
     # Specify which logs to collect or leave it to Default to select everything pre-configured in the default switch option below.
     [Parameter(Mandatory = $true)]
-    [ValidateSet('SystemInfo', 'BaseSCCMLogs', 'WindowsUpdateLogs', 'DefenderLogs', 'EdgeUpdateLogs', 'LogsRelatedToWindowsServicing', 'OneDriveLogs', 'SetupDiagLogs', 'SystemEventLog', 'SystemAppLog', 'BitlockerEventLog', 'SysmonEventLog', 'SepExclusions', 'MDMDiagnostics', 'PSADTLogs')]
+    [ValidateSet('Default', 'SystemInfo', 'BaseSCCMLogs', 'WindowsUpdateLogs', 'DefenderLogs', 'EdgeUpdateLogs', 'LogsRelatedToWindowsServicing', 'OneDriveLogs', 'SetupDiagLogs', 'SystemEventLog', 'SystemAppLog', 'BitlockerEventLog', 'SysmonEventLog', 'SepExclusions', 'MDMDiagnostics', 'PSADTLogs')]
     [String]$LogsToCollect = 'Default'
 )
 
@@ -624,7 +624,7 @@ Else {
     #MP is using https and needs a cert attached for any BITS jobs
     $Cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -Like "*$env:ComputerName*" -and $_.NotAfter -gt (Get-Date) -and $_.EnhancedKeyUsageList.ObjectId -eq "1.3.6.1.5.5.7.3.2" }
     If ($Cert.Count -gt 1) { $Cert = $Cert[0] }
-    $CertSubjectName = $Cert.Subject -Replace "(CN=)(.*?),.*", '$2' 
+    $CertSubjectName = ($Cert.Subject).split('=')[1].split(',')[0]
 
 
     $OSversion = (Get-WmiObject -Namespace Root\Cimv2 -Class Win32_OperatingSystem).Version
