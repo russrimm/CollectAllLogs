@@ -24,7 +24,11 @@ Param(
     # Specify which logs to collect or leave it to Default to select everything pre-configured in the default switch option below.
     [Parameter(Mandatory = $true)]
     [ValidateSet('Default', 'SystemInfo', 'BaseSCCMLogs', 'WindowsUpdateLogs', 'DefenderLogs', 'EdgeUpdateLogs', 'LogsRelatedToWindowsServicing', 'OneDriveLogs', 'SetupDiagLogs', 'SystemEventLog', 'SystemAppLog', 'BitlockerEventLog', 'SysmonEventLog', 'SepExclusions', 'MDMDiagnostics', 'PSADTLogs')]
-    [String]$LogsToCollect = 'Default'
+    [String]$LogsToCollect = 'Default',
+
+    # Specify Destination location for logs. The Management Point must have write access to the destination location.
+    [Parameter(Mandatory = $true)]
+    [String]$LogDestination
 )
 
 #Different run options based on what switch is provided to the script.
@@ -665,7 +669,7 @@ Else {
 }
 
 if ($SendStatusMessage -eq 'Yes') {
-    $SentstatusMessage = BuildAndSend-Registration -ManagementPointHostName $MP -MsgId 1234 -InsString1 $MP -InsString2 $UplodadFileName  -InsString3 "Insstring3"  -InsString4 "Insstring4"  -InsString5 "Insstring5"  -InsString6 "Insstring6"
+    $SentstatusMessage = BuildAndSend-Registration -ManagementPointHostName $MP -MsgId 1234 -InsString1 $MP -InsString2 $UplodadFileName  -InsString3 $LogDestination  -InsString4 "Insstring4"  -InsString5 "Insstring5"  -InsString6 "Insstring6"
 }
 
 
