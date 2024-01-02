@@ -20,24 +20,55 @@
     This script was developed in a collaborative effort by Microsoft Customer Engineers Russ Rimmerman and David Anderson.
     
 #> 
+Param(
+    # Specify which logs to collect or leave it to Default to select everything pre-configured in the default switch option below.
+    [Parameter(Mandatory = $true)]
+    [ValidateSet('Default', 'SystemInfo', 'BaseSCCMLogs', 'WindowsUpdateLogs', 'DefenderLogs', 'EdgeUpdateLogs', 'LogsRelatedToWindowsServicing', 'OneDriveLogs', 'SetupDiagLogs', 'SystemEventLog', 'SystemAppLog', 'BitlockerEventLog', 'SysmonEventLog', 'SepExclusions', 'MDMDiagnostics', 'PSADTLogs')]
+    [String]$LogsToCollect = 'Default',
 
-$GatherSystemInfo = 'Yes'
-$GatherBaseSCCMLogs = 'Yes'
-$GatherWindowsUpdateLogs = 'Yes'
-$GatherDefenderLogs = 'Yes'
-$GatherEdgeUpdateLogs = 'Yes'
-$GatherLogsRelatedToWindowsServicing = 'Yes'
-$GatherOneDriveLogs = 'Yes'
-$GatherSetupDiagLogs = 'Yes'
+    # Specify Destination location for logs. The Management Point must have write access to the destination location.
+    [Parameter(Mandatory = $true)]
+    [String]$LogDestination
+)
+
+#Different run options based on what switch is provided to the script.
+Switch ($LogsToCollect) {
+    'SystemInfo' {$GatherSystemInfo = 'Yes'}
+    'BaseSCCMLogs' {$GatherBaseSCCMLogs = 'Yes'}
+    'WindowsUpdateLogs' {$GatherWindowsUpdateLogs = 'Yes'}
+    'DefenderLogs' {$GatherDefenderLogs = 'Yes'}
+    'EdgeUpdateLogs' {$GatherEdgeUpdateLogs = 'Yes'}
+    'LogsRelatedToWindowsServicing' {$GatherLogsRelatedToWindowsServicing = 'Yes'}
+    'OneDriveLogs' {$GatherOneDriveLogs = 'Yes'}
+    'SetupDiagLogs' {$GatherSetupDiagLogs = 'Yes'}
+    'SystemEventLog' {$DumpSystemEventLog = 'Yes'}
+    'SystemAppLog' {$DumpSystemAppLog = 'Yes'}
+    'BitlockerEventLog' {$DumpBitlockerEventLog = 'Yes'}
+    'SysmonEventLog' {$DumpSysmonEventLog = 'Yes'}
+    'SepExclusions' {$GatherSepExclusions = 'Yes'}
+    'MDMDiagnostics' {$GatherMDMDiagnostics = 'Yes'}
+    'PSADTLogs' {$GatherPSADTLogs = 'Yes'}
+    default {
+        $GatherSystemInfo = 'Yes'
+        $GatherBaseSCCMLogs = 'Yes'
+        $GatherWindowsUpdateLogs = 'Yes'
+        $GatherDefenderLogs = 'Yes'
+        $GatherEdgeUpdateLogs = 'Yes'
+        $GatherLogsRelatedToWindowsServicing = 'Yes'
+        $GatherOneDriveLogs = 'Yes'
+        $GatherSetupDiagLogs = 'Yes'
+        $DumpSystemEventLog = 'Yes'
+        $DumpSystemAppLog = 'Yes'
+        $DumpBitlockerEventLog = 'Yes'
+        $DumpSysmonEventLog = 'Yes'
+        $GatherSepExclusions = 'No'
+        $GatherMDMDiagnostics = 'Yes'
+        $GatherPSADTLogs = 'Yes'
+    }
+}
+
 $SendStatusMessage = 'Yes'
-$DumpSystemEventLog = 'Yes'
-$DumpSystemAppLog = 'Yes'
-$DumpBitlockerEventLog = 'Yes'
-$GatherSepExclusions = 'No'
-$GatherMDMDiagnostics = 'Yes'
 $SentstatusMessage = 'No'
-
-
 $UploadedClientLogs = $False
 
 $MP = $null
@@ -416,6 +447,27 @@ If ($DumpBitlockerEventLog -eq 'Yes') {
     #Clear-Eventlog -LogName $logFileName
 }
 
+#Gather Sysmon EventLog
+If ($DumpSysmonEventLog -eq 'Yes') {
+    # Config
+    $logFileName = "Sysmon" # Add Name of the Logfile (System, Application, etc)
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\EventLogs | Out-Null
+    $path = "$CCMTempDir\logs\EventLogs\" # Add Path, needs to end with a backsplash
+
+    # do not edit
+    $exportFileName = $logFileName + (Get-Date -f yyyyMMdd) + ".evt"
+    $logFile = Get-WinEvent -logname "Microsoft-Windows-Sysmon/Operational" | Out-File $CCMTempDir\logs\$exportFileName
+
+    # Deletes all .evt logfiles in $Path
+    # Be careful, this script removes all files with the extension .evt not just the selfcreated logfiles
+    $Daysback = "-7"
+
+    $CurrentDate = Get-Date
+    $DatetoDelete = $CurrentDate.AddDays($Daysback)
+    Get-ChildItem $Path | Where-Object { ($_.LastWriteTime -lt $DatetoDelete) -and ($_.Extension -eq ".evt") } | Remove-Item
+    #Clear-Eventlog -LogName $logFileName
+}
+
 #Gather Windows Servicing (In-Place Upgrade) Logs
 If ($GatherLogsRelatedToWindowsServicing -eq 'Yes') {
 
@@ -547,6 +599,11 @@ If ($GatherSepExclusions -eq 'Yes') {
     }
 }
 
+#Gather PSADT Logs
+If ($GatherPSADTLogs -eq 'Yes') {
+    New-Item -ItemType Directory -Force -Path $CCMTempDir\logs\PSADT\Logs | Out-Null
+    Copy-Item -Path $env:windir\logs\Software\*.log -Destination $CCMTempDir\logs\PSADT\Logs -Force -Recurse | Out-Null
+}
 
 New-ZipFile $LogsZip $CCMFilestoZip | Out-Null
 
@@ -571,7 +628,7 @@ Else {
     #MP is using https and needs a cert attached for any BITS jobs
     $Cert = Get-ChildItem Cert:\LocalMachine\My | Where-Object { $_.Subject -Like "*$env:ComputerName*" -and $_.NotAfter -gt (Get-Date) -and $_.EnhancedKeyUsageList.ObjectId -eq "1.3.6.1.5.5.7.3.2" }
     If ($Cert.Count -gt 1) { $Cert = $Cert[0] }
-    $CertSubjectName = $Cert.Subject -Replace "(CN=)(.*?),.*", '$2' 
+    $CertSubjectName = ($Cert.Subject).split('=')[1].split(',')[0]
 
 
     $OSversion = (Get-WmiObject -Namespace Root\Cimv2 -Class Win32_OperatingSystem).Version
@@ -612,7 +669,7 @@ Else {
 }
 
 if ($SendStatusMessage -eq 'Yes') {
-    $SentstatusMessage = BuildAndSend-Registration -ManagementPointHostName $MP -MsgId 1234 -InsString1 $MP -InsString2 $UplodadFileName  -InsString3 "Insstring3"  -InsString4 "Insstring4"  -InsString5 "Insstring5"  -InsString6 "Insstring6"
+    $SentstatusMessage = BuildAndSend-Registration -ManagementPointHostName $MP -MsgId 1234 -InsString1 $MP -InsString2 $UplodadFileName  -InsString3 $LogDestination  -InsString4 "Insstring4"  -InsString5 "Insstring5"  -InsString6 "Insstring6"
 }
 
 
